@@ -1,401 +1,1024 @@
-<script>
-    // ==================== ИНИЦИАЛИЗАЦИЯ ====================
-    const tg = window.Telegram.WebApp;
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UNIVERSAL SHOP 🛍️</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', system-ui, sans-serif;
+        }
+        
+        :root {
+            --bg-color: #ffffff;
+            --text-color: #1a1a1a;
+            --card-bg: #f8f9fa;
+            --accent: #6366f1;
+            --border: #e5e7eb;
+            --shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+        
+        .dark-theme {
+            --bg-color: #0f172a;
+            --text-color: #f1f5f9;
+            --card-bg: #1e293b;
+            --accent: #818cf8;
+            --border: #334155;
+            --shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        body {
+            background: var(--bg-color);
+            color: var(--text-color);
+            transition: all 0.3s ease;
+            padding-bottom: 70px;
+        }
+        
+        /* Шапка */
+        .header {
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            background: var(--bg-color);
+            z-index: 100;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 20px;
+        }
+        
+        .logo-icon {
+            color: var(--accent);
+            font-size: 24px;
+        }
+        
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .search-box {
+            background: var(--card-bg);
+            padding: 8px 15px;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            width: 180px;
+        }
+        
+        .search-input {
+            background: transparent;
+            border: none;
+            color: var(--text-color);
+            width: 100%;
+            outline: none;
+        }
+        
+        .theme-toggle {
+            background: var(--card-bg);
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: var(--text-color);
+        }
+        
+        /* Блоки */
+        .container {
+            padding: 16px;
+        }
+        
+        .section-title {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin: 24px 0 16px 0;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .section-icon {
+            font-size: 22px;
+        }
+        
+        /* Горизонтальные полки с играми */
+        .shelf {
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            padding: 8px 0 20px 0;
+            scrollbar-width: thin;
+        }
+        
+        .shelf::-webkit-scrollbar {
+            height: 4px;
+        }
+        
+        .game-card {
+            min-width: 100px;
+            text-align: center;
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 16px 12px;
+            cursor: pointer;
+            transition: transform 0.2s;
+            border: 1px solid var(--border);
+        }
+        
+        .game-card:hover {
+            transform: translateY(-4px);
+        }
+        
+        .game-icon {
+            font-size: 32px;
+            margin-bottom: 10px;
+        }
+        
+        .game-name {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        /* Кнопка "Смотреть все" */
+        .view-all {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 500;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            justify-content: center;
+        }
+        
+        /* История просмотров */
+        .history-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 16px;
+            margin: 16px 0;
+            border: 1px solid var(--border);
+        }
+        
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+        
+        .delete-history {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 8px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        
+        /* Товары в ленте */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 16px;
+            margin-top: 20px;
+        }
+        
+        .product-card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid var(--border);
+            cursor: pointer;
+        }
+        
+        .product-image {
+            width: 100%;
+            height: 120px;
+            object-fit: cover;
+            background: linear-gradient(45deg, #6366f1, #8b5cf6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+        }
+        
+        .product-info {
+            padding: 12px;
+        }
+        
+        .product-name {
+            font-weight: 600;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+        
+        .product-description {
+            font-size: 12px;
+            color: #6b7280;
+            margin-bottom: 10px;
+            line-height: 1.3;
+        }
+        
+        .product-price {
+            color: var(--accent);
+            font-weight: 700;
+            font-size: 16px;
+        }
+        
+        .buy-btn {
+            margin-top: 8px;
+            width: 100%;
+            padding: 8px;
+            background: #10b981;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        
+        /* Кнопки действий */
+        .action-buttons {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--bg-color);
+            padding: 12px 16px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 12px;
+            z-index: 100;
+        }
+        
+        .action-btn {
+            flex: 1;
+            padding: 12px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: opacity 0.2s;
+        }
+        
+        .primary-btn {
+            background: var(--accent);
+            color: white;
+        }
+        
+        .secondary-btn {
+            background: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid var(--border);
+        }
+        
+        /* Админ кнопки */
+        .admin-buttons {
+            display: none;
+            margin: 16px 0;
+            gap: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .add-btn {
+            background: #10b981;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .admin-btn {
+            background: #8b5cf6;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        /* Адаптивность */
+        @media (max-width: 480px) {
+            .search-box {
+                width: 140px;
+            }
+            
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+            }
+            
+            .admin-buttons {
+                flex-direction: column;
+            }
+        }
+        
+        /* Анимации */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.3s ease-out;
+        }
+        
+        /* Админ-статус */
+        .admin-badge {
+            background: #8b5cf6;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Шапка -->
+    <div class="header">
+        <div class="logo">
+            <div class="logo-icon">🛍️</div>
+            <span>UNIVERSAL SHOP</span>
+            <div id="adminBadge" class="admin-badge" style="display: none;">👑 АДМИН</div>
+        </div>
+        <div class="header-controls">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" class="search-input" placeholder="Поиск товаров...">
+            </div>
+            <button class="theme-toggle" id="themeToggle">
+                <i class="fas fa-moon"></i>
+            </button>
+        </div>
+    </div>
     
-    // Расширяем на весь экран
-    tg.expand();
-    tg.enableClosingConfirmation();
+    <!-- Админ кнопки -->
+    <div class="container admin-buttons" id="adminButtons">
+        <button class="admin-btn" onclick="showAddGameForm()">
+            <i class="fas fa-plus-circle"></i> Добавить игру/приложение
+        </button>
+        <button class="add-btn" onclick="showAddProductForm()">
+            <i class="fas fa-cube"></i> Добавить товар
+        </button>
+        <button class="admin-btn" onclick="showOrders()" style="background: #f59e0b;">
+            <i class="fas fa-shopping-cart"></i> Управление заказами
+        </button>
+    </div>
     
-    // Данные пользователя из Telegram
-    const user = tg.initDataUnsafe.user;
-    const userId = user?.id || 'неизвестно';
-    const userName = user?.first_name || 'Пользователь';
+    <div class="container">
+        <!-- Блок "Игры" -->
+        <div class="section-title">
+            <div class="section-icon">🎮</div>
+            <span>Игры</span>
+        </div>
+        <div class="shelf" id="gamesShelf">
+            <!-- Игры загружаются через JS -->
+        </div>
+        <button class="view-all" onclick="showAllGames()">
+            <i class="fas fa-eye"></i> Смотреть все
+        </button>
+        
+        <!-- Блок "Приложения" -->
+        <div class="section-title">
+            <div class="section-icon">📱</div>
+            <span>Приложения Telegram</span>
+        </div>
+        <div class="shelf" id="appsShelf">
+            <!-- Приложения загружаются через JS -->
+        </div>
+        <button class="view-all" onclick="showAllApps()">
+            <i class="fas fa-eye"></i> Смотреть все
+        </button>
+        
+        <!-- Блок "Смотрел в последний раз" -->
+        <div class="section-title">
+            <div class="section-icon">🕒</div>
+            <span>Смотрел в последний раз</span>
+        </div>
+        <div class="history-card" id="historyCard">
+            <!-- История загружается через JS -->
+        </div>
+        
+        <!-- Общая лента товаров -->
+        <div class="section-title">
+            <div class="section-icon">🔥</div>
+            <span>Все товары</span>
+        </div>
+        <div class="products-grid" id="productsGrid">
+            <!-- Товары загружаются через JS -->
+        </div>
+    </div>
     
-    console.log('Пользователь Telegram:', user);
-    
-    // Проверка на админа (замените 123456789 на ваш реальный Telegram ID)
-    const ADMIN_IDS = [8381902355]; // Ваш ID здесь
-    const isAdmin = ADMIN_IDS.includes(Number(userId));
-    
-    // ==================== ТЕМА ====================
-    let isDarkTheme = tg.colorScheme === 'dark';
-    
-    // Устанавливаем тему из Telegram
-    if (isDarkTheme) {
-        document.body.classList.add('dark-theme');
-        document.getElementById('themeToggle').innerHTML = '<i class="fas fa-sun"></i>';
-    }
-    
-    // Переключение темы
-    document.getElementById('themeToggle').addEventListener('click', function() {
+    <!-- Кнопки действий -->
+    <div class="action-buttons">
+        <button class="action-btn secondary-btn" onclick="openSupport()">
+            <i class="fas fa-comment"></i> Поддержка
+        </button>
+        <button class="action-btn secondary-btn" onclick="openBonuses()">
+            <i class="fas fa-gift"></i> Бонусы
+        </button>
+        <button class="action-btn primary-btn" onclick="openProfile()">
+            <i class="fas fa-user"></i> Профиль
+        </button>
+    </div>
+
+    <script>
+        // ==================== ИНИЦИАЛИЗАЦИЯ ====================
+        const tg = window.Telegram.WebApp;
+        
+        // Расширяем на весь экран
+        tg.expand();
+        tg.enableClosingConfirmation();
+        
+        // Данные пользователя из Telegram
+        const user = tg.initDataUnsafe.user;
+        const userId = user?.id || 'неизвестно';
+        const userName = user?.first_name || 'Пользователь';
+        
+        // ПРОВЕРКА НА АДМИНА - ВАШ ID: 8381902355
+        const ADMIN_IDS = [8381902355]; // Ваш Telegram ID здесь
+        const isAdmin = ADMIN_IDS.includes(Number(userId));
+        
+        console.log('Пользователь Telegram:', user);
+        console.log('ID пользователя:', userId);
+        console.log('Это админ?:', isAdmin);
+        
+        // ==================== ТЕМА ====================
+        let isDarkTheme = tg.colorScheme === 'dark';
+        
+        // Устанавливаем тему из Telegram
         if (isDarkTheme) {
-            document.body.classList.remove('dark-theme');
-            this.innerHTML = '<i class="fas fa-moon"></i>';
-            tg.setHeaderColor('#ffffff');
-            isDarkTheme = false;
-        } else {
             document.body.classList.add('dark-theme');
-            this.innerHTML = '<i class="fas fa-sun"></i>';
-            tg.setHeaderColor('#0f172a');
-            isDarkTheme = true;
-        }
-    });
-    
-    // ==================== ДАННЫЕ ====================
-    // Игры (в реальности будут с сервера)
-    const games = [
-        { id: 1, icon: '🎮', name: 'Fortnite', type: 'game' },
-        { id: 2, icon: '⚔️', name: 'Minecraft', type: 'game' },
-        { id: 3, icon: '🚗', name: 'GTA V', type: 'game' },
-        { id: 4, icon: '🔫', name: 'CS:GO', type: 'game' }
-    ];
-    
-    const apps = [
-        { id: 5, icon: '📈', name: 'Продвижение', type: 'app' },
-        { id: 6, icon: '🎨', name: 'Дизайн', type: 'app' },
-        { id: 7, icon: '🎁', name: 'NFT-подарки', type: 'app' }
-    ];
-    
-    const products = [
-        { 
-            id: 101, 
-            name: 'Аккаунт Fortnite Pro', 
-            desc: 'Редкие скины + 5000 V-bucks', 
-            price: '$24.99', 
-            icon: '👤',
-            gameId: 1,
-            data: 'Логин: fortnite_pro_123\nПароль: QwErTy2024' // Данные для выдачи
-        },
-        { 
-            id: 102, 
-            name: '1000 В-баксов', 
-            desc: 'Игровая валюта Fortnite', 
-            price: '$9.99', 
-            icon: '💰',
-            gameId: 1,
-            data: 'Код: FN-7X9P-2K4L-8M3Q'
-        }
-    ];
-    
-    // История просмотров (из localStorage)
-    let viewHistory = JSON.parse(localStorage.getItem('viewHistory') || '[]');
-    
-    // ==================== ЗАГРУЗКА ИНТЕРФЕЙСА ====================
-    document.addEventListener('DOMContentLoaded', function() {
-        // Показываем админ-панель если админ
-        if (isAdmin) {
-            document.getElementById('adminButtons').style.display = 'block';
-            tg.showAlert(`👑 Добро пожаловать, администратор ${userName}!`);
+            document.getElementById('themeToggle').innerHTML = '<i class="fas fa-sun"></i>';
         }
         
-        // Приветствие
-        tg.showPopup({
-            title: `👋 Привет, ${userName}!`,
-            message: 'Добро пожаловать в UNIVERSAL SHOP',
-            buttons: [{ type: 'default', text: 'Начать покупки', id: 'start' }]
+        // ==================== ДАННЫЕ ====================
+        // Игры и приложения
+        let games = [
+            { id: 1, icon: '🎮', name: 'Fortnite', type: 'game' },
+            { id: 2, icon: '⚔️', name: 'Minecraft', type: 'game' },
+            { id: 3, icon: '🚗', name: 'GTA V', type: 'game' },
+            { id: 4, icon: '🔫', name: 'CS:GO', type: 'game' }
+        ];
+        
+        let apps = [
+            { id: 5, icon: '📈', name: 'Продвижение', type: 'app' },
+            { id: 6, icon: '🎨', name: 'Дизайн', type: 'app' },
+            { id: 7, icon: '🎁', name: 'NFT-подарки', type: 'app' }
+        ];
+        
+        let products = [
+            { 
+                id: 101, 
+                name: 'Аккаунт Fortnite Pro', 
+                desc: 'Редкие скины + 5000 V-bucks', 
+                price: '$24.99', 
+                icon: '👤',
+                gameId: 1,
+                data: 'Логин: fortnite_pro_123\nПароль: QwErTy2024\n\nВажно: смените пароль после входа!'
+            },
+            { 
+                id: 102, 
+                name: '1000 В-баксов', 
+                desc: 'Игровая валюта Fortnite', 
+                price: '$9.99', 
+                icon: '💰',
+                gameId: 1,
+                data: 'Код: FN-7X9P-2K4L-8M3Q\n\nАктивация: Настройки → Счет → Ввести код'
+            },
+            { 
+                id: 103, 
+                name: 'Дизайн канала Telegram', 
+                desc: 'Уникальный дизайн + баннер', 
+                price: '$49.99', 
+                icon: '🎨',
+                gameId: 6,
+                data: 'Ссылка на Figma: https://figma.com/file/...\n\nДанные для входа: design@mail.com / pass123'
+            }
+        ];
+        
+        // История просмотров
+        let viewHistory = JSON.parse(localStorage.getItem('viewHistory') || '[]');
+        
+        // ==================== ЗАГРУЗКА ПРИЛОЖЕНИЯ ====================
+        document.addEventListener('DOMContentLoaded', function() {
+            // Показываем админ-панель если админ
+            if (isAdmin) {
+                document.getElementById('adminBadge').style.display = 'inline-block';
+                document.getElementById('adminButtons').style.display = 'flex';
+                tg.showAlert(`👑 Добро пожаловать, администратор ${userName}! Ваш ID: ${userId}`);
+            }
+            
+            // Приветствие
+            setTimeout(() => {
+                tg.showPopup({
+                    title: `👋 Привет, ${userName}!`,
+                    message: isAdmin 
+                        ? 'Добро пожаловать в панель управления магазином!'
+                        : 'Добро пожаловать в UNIVERSAL SHOP!',
+                    buttons: [{ type: 'default', text: 'Начать покупки', id: 'start' }]
+                });
+            }, 1000);
+            
+            // Загружаем данные
+            loadGames();
+            loadApps();
+            loadProducts();
+            updateHistory();
+            
+            // Настраиваем кнопку покупки
+            tg.MainButton.setText("🛒 Перейти к оплате");
+            tg.MainButton.onClick(buyProduct);
+            tg.MainButton.hide();
+            
+            // Настройка переключения темы
+            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
         });
         
-        // Загружаем данные
-        loadGames();
-        loadApps();
-        loadProducts();
-        updateHistory();
-        
-        // Настраиваем кнопку покупки
-        tg.MainButton.setText("🛒 Перейти к оплате");
-        tg.MainButton.onClick(buyProduct);
-        tg.MainButton.hide();
-    });
-    
-    // ==================== ФУНКЦИИ ЗАГРУЗКИ ====================
-    function loadGames() {
-        const shelf = document.getElementById('gamesShelf');
-        shelf.innerHTML = '';
-        
-        games.forEach(game => {
-            const card = document.createElement('div');
-            card.className = 'game-card fade-in';
-            card.innerHTML = `
-                <div class="game-icon">${game.icon}</div>
-                <div class="game-name">${game.name}</div>
-            `;
-            card.onclick = () => openCategory(game);
-            shelf.appendChild(card);
-        });
-    }
-    
-    function loadApps() {
-        const shelf = document.getElementById('appsShelf');
-        shelf.innerHTML = '';
-        
-        apps.forEach(app => {
-            const card = document.createElement('div');
-            card.className = 'game-card fade-in';
-            card.innerHTML = `
-                <div class="game-icon">${app.icon}</div>
-                <div class="game-name">${app.name}</div>
-            `;
-            card.onclick = () => openCategory(app);
-            shelf.appendChild(card);
-        });
-    }
-    
-    function loadProducts() {
-        const grid = document.getElementById('productsGrid');
-        grid.innerHTML = '';
-        
-        products.forEach(product => {
-            const card = document.createElement('div');
-            card.className = 'product-card fade-in';
-            card.innerHTML = `
-                <div class="product-image" style="background: linear-gradient(45deg, #6366f1, #8b5cf6);">
-                    ${product.icon}
-                </div>
-                <div class="product-info">
-                    <div class="product-name">${product.name}</div>
-                    <div class="product-description">${product.desc}</div>
-                    <div class="product-price">${product.price}</div>
-                    <button class="buy-btn" style="margin-top: 8px; width: 100%; padding: 8px; background: #10b981; color: white; border: none; border-radius: 8px; cursor: pointer;" 
-                            onclick="selectProduct(${product.id})">
-                        Купить
-                    </button>
-                </div>
-            `;
-            grid.appendChild(card);
-        });
-    }
-    
-    function updateHistory() {
-        const historyCard = document.getElementById('historyCard');
-        if (viewHistory.length > 0) {
-            const lastProduct = viewHistory[viewHistory.length - 1];
-            historyCard.innerHTML = `
-                <div class="history-header">
-                    <span>${lastProduct.name}</span>
-                    <button class="delete-history" onclick="deleteHistory()">Удалить</button>
-                </div>
-                <div>Цена: <strong>${lastProduct.price}</strong> • Просмотрен: ${lastProduct.time}</div>
-            `;
-        } else {
-            historyCard.innerHTML = `
-                <div class="history-header">
-                    <span>История просмотров пуста</span>
-                </div>
-                <div>Здесь будет последний просмотренный товар</div>
-            `;
+        // ==================== ТЕМА ====================
+        function toggleTheme() {
+            if (isDarkTheme) {
+                document.body.classList.remove('dark-theme');
+                document.getElementById('themeToggle').innerHTML = '<i class="fas fa-moon"></i>';
+                tg.setHeaderColor('#ffffff');
+                isDarkTheme = false;
+            } else {
+                document.body.classList.add('dark-theme');
+                document.getElementById('themeToggle').innerHTML = '<i class="fas fa-sun"></i>';
+                tg.setHeaderColor('#0f172a');
+                isDarkTheme = true;
+            }
         }
-    }
-    
-    // ==================== ОСНОВНЫЕ ФУНКЦИИ ====================
-    let selectedProduct = null;
-    
-    function selectProduct(productId) {
-        selectedProduct = products.find(p => p.id === productId);
         
-        // Добавляем в историю
-        viewHistory.push({
-            id: selectedProduct.id,
-            name: selectedProduct.name,
-            price: selectedProduct.price,
-            time: new Date().toLocaleTimeString()
-        });
-        localStorage.setItem('viewHistory', JSON.stringify(viewHistory));
-        updateHistory();
+        // ==================== ЗАГРУЗКА ДАННЫХ ====================
+        function loadGames() {
+            const shelf = document.getElementById('gamesShelf');
+            shelf.innerHTML = '';
+            
+            games.forEach(game => {
+                const card = document.createElement('div');
+                card.className = 'game-card fade-in';
+                card.innerHTML = `
+                    <div class="game-icon">${game.icon}</div>
+                    <div class="game-name">${game.name}</div>
+                `;
+                card.onclick = () => openCategory(game);
+                shelf.appendChild(card);
+            });
+        }
         
-        // Показываем информацию о товаре
-        tg.showPopup({
-            title: `🎯 ${selectedProduct.name}`,
-            message: `${selectedProduct.desc}\n\nЦена: ${selectedProduct.price}\n\nВыберите способ оплаты:`,
-            buttons: [
-                { id: 'crypto', type: 'default', text: '💎 Крипто (USDT/TON)' },
-                { id: 'rub', type: 'default', text: '₽ Рубли по реквизитам' },
-                { id: 'cancel', type: 'cancel', text: 'Отмена' }
-            ]
-        }).then(result => {
-            if (result === 'crypto') {
-                startCryptoPayment();
-            } else if (result === 'rub') {
-                startRubPayment();
+        function loadApps() {
+            const shelf = document.getElementById('appsShelf');
+            shelf.innerHTML = '';
+            
+            apps.forEach(app => {
+                const card = document.createElement('div');
+                card.className = 'game-card fade-in';
+                card.innerHTML = `
+                    <div class="game-icon">${app.icon}</div>
+                    <div class="game-name">${app.name}</div>
+                `;
+                card.onclick = () => openCategory(app);
+                shelf.appendChild(card);
+            });
+        }
+        
+        function loadProducts() {
+            const grid = document.getElementById('productsGrid');
+            grid.innerHTML = '';
+            
+            products.forEach(product => {
+                const card = document.createElement('div');
+                card.className = 'product-card fade-in';
+                card.innerHTML = `
+                    <div class="product-image" style="background: linear-gradient(45deg, #6366f1, #8b5cf6);">
+                        ${product.icon}
+                    </div>
+                    <div class="product-info">
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-description">${product.desc}</div>
+                        <div class="product-price">${product.price}</div>
+                        <button class="buy-btn" onclick="selectProduct(${product.id})">
+                            Купить
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+        
+        function updateHistory() {
+            const historyCard = document.getElementById('historyCard');
+            if (viewHistory.length > 0) {
+                const lastProduct = viewHistory[viewHistory.length - 1];
+                historyCard.innerHTML = `
+                    <div class="history-header">
+                        <span>${lastProduct.name}</span>
+                        <button class="delete-history" onclick="deleteHistory()">Удалить</button>
+                    </div>
+                    <div>Цена: <strong>${lastProduct.price}</strong> • Просмотрен: ${lastProduct.time}</div>
+                `;
+            } else {
+                historyCard.innerHTML = `
+                    <div class="history-header">
+                        <span>История просмотров пуста</span>
+                    </div>
+                    <div>Здесь будет последний просмотренный товар</div>
+                `;
+            }
+        }
+        
+        // ==================== ОТКРЫТИЕ КАТЕГОРИЙ ====================
+        function openCategory(category) {
+            if (isAdmin) {
+                // Для админа - меню управления
+                tg.showPopup({
+                    title: `👑 ${category.icon} ${category.name}`,
+                    message: `Управление категорией "${category.name}":\n\nВыберите действие:`,
+                    buttons: [
+                        { id: 'add_product', type: 'default', text: '➕ Добавить товар' },
+                        { id: 'edit', type: 'default', text: '✏️ Редактировать' },
+                        { id: 'view', type: 'default', text: '👁️ Просмотреть товары' },
+                        { id: 'delete', type: 'destructive', text: '🗑️ Удалить категорию' },
+                        { id: 'close', type: 'cancel', text: 'Закрыть' }
+                    ]
+                }).then(result => {
+                    if (result === 'add_product') {
+                        showAddProductToCategory(category);
+                    } else if (result === 'edit') {
+                        editCategory(category);
+                    } else if (result === 'view') {
+                        viewCategoryProducts(category);
+                    } else if (result === 'delete') {
+                        deleteCategory(category);
+                    }
+                });
+            } else {
+                // Для обычных пользователей
+                tg.showPopup({
+                    title: `${category.icon} ${category.name}`,
+                    message: `Товары в категории "${category.name}"`,
+                    buttons: [
+                        { id: 'view', type: 'default', text: '👁️ Просмотреть товары' },
+                        { id: 'close', type: 'cancel', text: 'Закрыть' }
+                    ]
+                });
+            }
+        }
+        
+        // ==================== ПОКУПКА ТОВАРОВ ====================
+        let selectedProduct = null;
+        
+        function selectProduct(productId) {
+            selectedProduct = products.find(p => p.id === productId);
+            
+            // Добавляем в историю
+            viewHistory.push({
+                id: selectedProduct.id,
+                name: selectedProduct.name,
+                price: selectedProduct.price,
+                time: new Date().toLocaleTimeString()
+            });
+            localStorage.setItem('viewHistory', JSON.stringify(viewHistory));
+            updateHistory();
+            
+            // Показываем информацию о товаре
+            tg.showPopup({
+                title: `🎯 ${selectedProduct.name}`,
+                message: `${selectedProduct.desc}\n\nЦена: ${selectedProduct.price}\n\nВыберите способ оплаты:`,
+                buttons: [
+                    { id: 'crypto', type: 'default', text: '💎 Крипто (USDT/TON)' },
+                    { id: 'rub', type: 'default', text: '₽ Рубли по реквизитам' },
+                    { id: 'cancel', type: 'cancel', text: 'Отмена' }
+                ]
+            }).then(result => {
+                if (result === 'crypto') {
+                    startCryptoPayment();
+                } else if (result === 'rub') {
+                    startRubPayment();
+                }
+            });
+            
+            // Активируем кнопку покупки
+            tg.MainButton.setText(`Купить за ${selectedProduct.price}`);
+            tg.MainButton.show();
+        }
+        
+        function buyProduct() {
+            if (!selectedProduct) {
+                tg.showAlert('Сначала выберите товар!');
+                return;
+            }
+            
+            tg.showPopup({
+                title: 'Подтверждение покупки',
+                message: `Вы уверены, что хотите купить "${selectedProduct.name}" за ${selectedProduct.price}?`,
+                buttons: [
+                    { id: 'confirm', type: 'destructive', text: '✅ Да, купить' },
+                    { id: 'cancel', type: 'cancel', text: 'Отмена' }
+                ]
+            }).then(result => {
+                if (result === 'confirm') {
+                    startCryptoPayment();
+                }
+            });
+        }
+        
+        // ==================== ОПЛАТА ====================
+        function startCryptoPayment() {
+            tg.showAlert(`💎 Крипто-оплата\n\nТовар: ${selectedProduct.name}\nСумма: ${selectedProduct.price}\n\nПосле оплаты товар будет выдан автоматически в течение 1-2 минут.`);
+            
+            // Имитация успешной оплаты
+            setTimeout(() => {
+                deliverProduct('crypto');
+            }, 2000);
+        }
+        
+        function startRubPayment() {
+            tg.showPopup({
+                title: '₽ Оплата по реквизитам',
+                message: `Товар: ${selectedProduct.name}\nСумма: ${selectedProduct.price}\n\nРеквизиты для перевода:\n\n💳 СБЕРБАНК: 2202 2001 2345 6789\n👤 ИВАН И.И.\n\nПосле перевода отправьте скриншот чека в поддержку.`,
+                buttons: [
+                    { id: 'support', type: 'default', text: '📞 Открыть поддержку' },
+                    { id: 'cancel', type: 'cancel', text: 'Понятно' }
+                ]
+            }).then(result => {
+                if (result === 'support') {
+                    openSupport();
+                }
+            });
+            
+            // Отправка заказа админу
+            sendOrderToAdminGroup('rub');
+        }
+        
+        function deliverProduct(paymentMethod) {
+            tg.showAlert(`✅ Оплата подтверждена!\n\nТовар: ${selectedProduct.name}\n\n📦 ДАННЫЕ ДЛЯ ПОЛУЧЕНИЯ:\n\n${selectedProduct.data}\n\n⚠️ Сохраните эти данные!`);
+            
+            // Отправляем данные в бота
+            tg.sendData(JSON.stringify({
+                action: 'product_delivered',
+                productId: selectedProduct.id,
+                userId: userId,
+                userName: userName,
+                paymentMethod: paymentMethod
+            }));
+            
+            // Скрываем кнопку покупки
+            tg.MainButton.hide();
+            selectedProduct = null;
+        }
+        
+        function sendOrderToAdminGroup(paymentMethod) {
+            tg.showAlert('📋 Заказ создан! Ожидайте проверки оплаты администратором.');
+            
+            // В реальности здесь запрос к бэкенду
+            console.log('Заказ отправлен админам:', {
+                product: selectedProduct,
+                user: user,
+                paymentMethod: paymentMethod,
+                timestamp: new Date().toISOString()
+            });
+        }
+        
+        // ==================== АДМИН-ФУНКЦИИ ====================
+        function showAddGameForm() {
+            tg.showPopup({
+                title: '➕ Добавить игру/приложение',
+                message: 'Введите данные новой категории:',
+                buttons: [
+                    { id: 'game', type: 'default', text: '🎮 Игра' },
+                    { id: 'app', type: 'default', text: '📱 Приложение' },
+                    { id: 'cancel', type: 'cancel', text: 'Отмена' }
+                ]
+            }).then(result => {
+                if (result === 'game' || result === 'app') {
+                    tg.showAlert(`Форма создания ${result === 'game' ? 'игры' : 'приложения'}:\n\n• Иконка: 🎮\n• Название: Новая категория\n• Тип: ${result === 'game' ? 'Игра' : 'Приложение'}\n\nСоздать?`);
+                }
+            });
+        }
+        
+        function showAddProductForm() {
+            tg.showPopup({
+                title: '📦 Добавить товар',
+                message: 'Выберите категорию для товара:',
+                buttons: [
+                    ...games.map(game => ({ 
+                        id: `game_${game.id}`, 
+                        type: 'default', 
+                        text: `${game.icon} ${game.name}` 
+                    })),
+                    ...apps.map(app => ({ 
+                        id: `app_${app.id}`, 
+                        type: 'default', 
+                        text: `${app.icon} ${app.name}` 
+                    })),
+                    { id: 'cancel', type: 'cancel', text: 'Отмена' }
+                ]
+            }).then(result => {
+                if (result && result !== 'cancel') {
+                    const categoryId = parseInt(result.split('_')[1]);
+                    const category = [...games, ...apps].find(c => c.id === categoryId);
+                    showProductCreationForm(category);
+                }
+            });
+        }
+        
+        function showAddProductToCategory(category) {
+            showProductCreationForm(category);
+        }
+        
+        function showProductCreationForm(category) {
+            tg.showPopup({
+                title: `➕ Товар в ${category.name}`,
+                message: `Заполните данные товара:\n\n1. Название товара\n2. Описание\n3. Цена ($ или ₽)\n4. Данные для выдачи (логин:пароль)\n\nПример данных для выдачи:\nЛогин: player123\nПароль: pass456\nКлюч: ABC-DEF-123`,
+                buttons: [
+                    { id: 'create', type: 'default', text: '📝 Создать товар' },
+                    { id: 'cancel', type: 'cancel', text: 'Отмена' }
+                ]
+            }).then(result => {
+                if (result === 'create') {
+                    tg.showAlert(`✅ Товар добавлен в "${category.name}"!\n\nТеперь он доступен для покупки.`);
+                    
+                    // В реальности здесь сохранение в базу
+                    const newProduct = {
+                        id: Date.now(),
+                        name: 'Новый товар',
+                        desc: 'Описание товара',
+                        price: '$19.99',
+                        icon: '📦',
+                        gameId: category.id,
+                        data: 'Логин: test\nПароль: test123'
+                    };
+                    
+                    products.push(newProduct);
+                    loadProducts();
+                }
+            });
+        }
+        
+        function editCategory(category) {
+            tg.showPopup({
+                title: `✏️ Редактировать ${category.name}`,
+                message: `Измените данные категории:`,
+                buttons: [
+                    { id: 'name', type: 'default', text: '📝 Изменить название' },
+                    { id: 'icon', type: 'default', text: '🎨 Изменить иконку' },
+                    { id: 'cancel', type: 'cancel', text: 'Отмена' }
+                ]
+            });
+        }
+        
+        function viewCategoryProducts(category) {
+            const categoryProducts = products.filter(p => p.gameId === category.id);
+            
+            if (categoryProducts.length === 0) {
+                tg.showAlert(`В категории "${category.name}" пока нет товаров.`);
+                return;
+            }
+            
+            let message = `Товары в "${category.name}":\n\n`;
+            categoryProducts.forEach((p, i) => {
+                message += `${i+1}. ${p.name} - ${p.price}\n`;
+            });
+            
+            tg.showAlert(message);
+        }
+        
+        function deleteCategory(category) {
+            tg.showPopup({
+                title: '🗑️ Удалить категорию',
+                message: `Вы уверены, что хотите удалить "${category.name}"?\n\nВсе товары в этой категории также будут удалены!`,
+                buttons: [
+                    { id: 'delete', type: 'destructive', text: 'Да, удалить' },
+                    { id: 'cancel', type: 'cancel', text: 'Отмена' }
+                ]
+            }).then(result => {
+                if (result === 'delete') {
+                    tg.showAlert(`Категория "${category.name}" удалена.`);
+                }
+            });
+        }
+        
+        function showOrders() {
+            tg.showAlert(`📊 Управление заказами\n\nЗдесь будет список всех заказов:\n\n• Ожидают оплаты: 3\n• В обработке: 2\n• Выполнены: 15\n\nДля управления заказами перейдите в Telegram-группу.`);
+        }
+        
+        // ==================== ДОПОЛНИТЕЛЬНЫЕ ФУНКЦИИ ====================
+        function deleteHistory() {
+            viewHistory = [];
+            localStorage.removeItem('viewHistory');
+            updateHistory();
+            tg.showAlert('История просмотров очищена');
+        }
+        
+        function showAllGames() {
+            tg.showAlert('🎮 Все игры магазина\n\nВ разработке: полный каталог игр');
+        }
+        
+        function showAllApps() {
+            tg.showAlert('📱 Все приложения\n\nВ разработке: полный каталог услуг Telegram');
+        }
+        
+        function openSupport() {
+            tg.showPopup({
+                title: '💬 Поддержка',
+                message: 'Выберите способ связи:',
+                buttons: [
+                    { id: 'chat', type: 'default', text: '💬 Написать в чат' },
+                    { id: 'faq', type: 'default', text: '❓ Частые вопросы' },
+                    { id: 'close', type: 'cancel', text: 'Закрыть' }
+                ]
+            }).then(result => {
+                if (result === 'chat') {
+                    tg.openTelegramLink('https://t.me/ваша_поддержка');
+                } else if (result === 'faq') {
+                    tg.showAlert('❓ Частые вопросы\n\nQ: Как получить товар после оплаты?\nA: Данные придут автоматически в чат.\n\nQ: Сколько ждать проверки оплаты?\nA: До 15 минут в рабочее время.');
+                }
+            });
+        }
+        
+        function openBonuses() {
+            tg.showAlert('🎁 Раздел бонусов\n\n• Промокод WELCOME10 - 10% скидка\n• Каждые 5 покупок - бесплатный товар\n• Реферальная программа: 5% с каждой покупки друга');
+        }
+        
+        function openProfile() {
+            tg.showPopup({
+                title: `👤 Профиль ${userName}`,
+                message: `ID: ${userId}\n\nСтатистика:\n• Заказов: 0\n• Потрачено: $0\n• Бонусов: 100\n\n${isAdmin ? '👑 Статус: Администратор' : '👤 Статус: Покупатель'}`,
+                buttons: [
+                    { id: 'orders', type: 'default', text: '📦 Мои заказы' },
+                    { id: 'bonuses', type: 'default', text: '🎁 Мои бонусы' },
+                    { id: 'close', type: 'cancel', text: 'Закрыть' }
+                ]
+            });
+        }
+        
+        // ==================== ПОИСК ====================
+        const searchInput = document.querySelector('.search-input');
+        searchInput.addEventListener('input', function(e) {
+            const query = e.target.value.toLowerCase();
+            if (query.length > 1) {
+                console.log('Поиск товаров:', query);
             }
         });
         
-        // Активируем кнопку покупки
-        tg.MainButton.setText(`Купить за ${selectedProduct.price}`);
-        tg.MainButton.show();
-    }
-    
-    function openCategory(category) {
-        tg.showPopup({
-            title: `${category.icon} ${category.name}`,
-            message: `Товары в категории "${category.name}"`,
-            buttons: [
-                { id: 'view', type: 'default', text: '👁️ Просмотреть товары' },
-                isAdmin ? { id: 'add', type: 'default', text: '➕ Добавить товар' } : null,
-                { id: 'close', type: 'cancel', text: 'Закрыть' }
-            ].filter(Boolean)
-        }).then(result => {
-            if (result === 'add' && isAdmin) {
-                addNewProductToCategory(category.id);
-            }
-        });
-    }
-    
-    // ==================== ОПЛАТА ====================
-    function startCryptoPayment() {
-        tg.showAlert(`💎 Крипто-оплата\n\nТовар: ${selectedProduct.name}\nСумма: ${selectedProduct.price}\n\nПосле оплаты товар будет выдан автоматически.`);
-        
-        // Имитация успешной оплаты (в реальности здесь API криптобота)
-        setTimeout(() => {
-            deliverProduct('crypto');
-        }, 2000);
-    }
-    
-    function startRubPayment() {
-        tg.showPopup({
-            title: '₽ Оплата по реквизитам',
-            message: `Товар: ${selectedProduct.name}\nСумма: ${selectedProduct.price}\n\nРеквизиты для перевода:\n\n💳 СБЕРБАНК: 2202 2001 2345 6789\n👤 ИВАН И.И.\n\nПосле перевода отправьте скриншот чека в поддержку.`,
-            buttons: [
-                { id: 'support', type: 'default', text: '📞 Открыть поддержку' },
-                { id: 'cancel', type: 'cancel', text: 'Понятно' }
-            ]
-        }).then(result => {
-            if (result === 'support') {
-                openSupport();
-            }
-        });
-        
-        // Симуляция отправки заказа в группу админов
-        sendOrderToAdminGroup('rub');
-    }
-    
-    function buyProduct() {
-        if (!selectedProduct) {
-            tg.showAlert('Сначала выберите товар!');
-            return;
+        // ==================== ОТПРАВКА ДАННЫХ БОТУ ====================
+        function sendToBot(action, data) {
+            const payload = {
+                action: action,
+                userId: userId,
+                data: data,
+                timestamp: new Date().toISOString()
+            };
+            
+            tg.sendData(JSON.stringify(payload));
+            console.log('Отправлено боту:', payload);
         }
-        
-        tg.showPopup({
-            title: 'Подтверждение покупки',
-            message: `Вы уверены, что хотите купить "${selectedProduct.name}" за ${selectedProduct.price}?`,
-            buttons: [
-                { id: 'confirm', type: 'destructive', text: '✅ Да, купить' },
-                { id: 'cancel', type: 'cancel', text: 'Отмена' }
-            ]
-        }).then(result => {
-            if (result === 'confirm') {
-                startCryptoPayment(); // По умолчанию крипто
-            }
-        });
-    }
-    
-    // ==================== ВЫДАЧА ТОВАРА ====================
-    function deliverProduct(paymentMethod) {
-        tg.showAlert(`✅ Оплата подтверждена!\n\nТовар: ${selectedProduct.name}\n\nДанные для получения:\n${selectedProduct.data}\n\nСкопируйте эти данные!`);
-        
-        // Отправляем данные в бота (реальная интеграция)
-        tg.sendData(JSON.stringify({
-            action: 'product_delivered',
-            productId: selectedProduct.id,
-            userId: userId,
-            paymentMethod: paymentMethod,
-            productData: selectedProduct.data
-        }));
-        
-        // Скрываем кнопку покупки
-        tg.MainButton.hide();
-        selectedProduct = null;
-    }
-    
-    function sendOrderToAdminGroup(paymentMethod) {
-        // В реальности здесь запрос к вашему бэкенду
-        console.log('Заказ отправлен админам:', {
-            product: selectedProduct,
-            user: user,
-            paymentMethod: paymentMethod
-        });
-        
-        tg.showAlert('📋 Заказ создан! Ожидайте проверки оплаты администратором.');
-    }
-    
-    // ==================== АДМИН-ФУНКЦИИ ====================
-    function addNewGame() {
-        tg.showPopup({
-            title: '➕ Добавить игру',
-            message: 'Введите название новой игры:',
-            buttons: [
-                { id: 'confirm', type: 'default', text: 'Добавить' },
-                { id: 'cancel', type: 'cancel', text: 'Отмена' }
-            ]
-        }).then(result => {
-            if (result === 'confirm') {
-                tg.showAlert('Игра добавлена! (в реальном приложении здесь будет форма)');
-            }
-        });
-    }
-    
-    function addNewProduct() {
-        tg.showAlert('📦 Форма добавления товара\n\nВ реальном приложении здесь будет форма с:\n- Названием\n- Описанием\n- Ценой\n- Фото\n- Данными для выдачи');
-    }
-    
-    function addNewProductToCategory(categoryId) {
-        tg.showAlert(`Добавление товара в категорию ID: ${categoryId}`);
-    }
-    
-    // ==================== ДОПОЛНИТЕЛЬНЫЕ ФУНКЦИИ ====================
-    function deleteHistory() {
-        viewHistory = [];
-        localStorage.removeItem('viewHistory');
-        updateHistory();
-        tg.showAlert('История просмотров очищена');
-    }
-    
-    function showAllGames() {
-        tg.showAlert('📋 Все игры магазина\n\nВ реальном приложении здесь будет полный список');
-    }
-    
-    function showAllApps() {
-        tg.showAlert('📱 Все приложения\n\nВ реальном приложении здесь будет полный список услуг');
-    }
-    
-    function openSupport() {
-        tg.showPopup({
-            title: '💬 Поддержка',
-            message: 'Свяжитесь с нами для помощи:',
-            buttons: [
-                { id: 'chat', type: 'default', text: '💬 Написать в чат' },
-                { id: 'faq', type: 'default', text: '❓ Частые вопросы' },
-                { id: 'close', type: 'cancel', text: 'Закрыть' }
-            ]
-        }).then(result => {
-            if (result === 'chat') {
-                // Открываем чат с поддержкой
-                tg.openTelegramLink('https://t.me/ваша_поддержка');
-            }
-        });
-    }
-    
-    function openBonuses() {
-        tg.showAlert('🎁 Раздел бонусов\n\nЗдесь будут промокоды и акции');
-    }
-    
-    function openProfile() {
-        tg.showPopup({
-            title: `👤 Профиль ${userName}`,
-            message: `ID: ${userId}\n\nБаланс: 0 руб\nЗаказов: 0\n\nДоступно только для авторизованных пользователей`,
-            buttons: [
-                { id: 'orders', type: 'default', text: '📦 Мои заказы' },
-                { id: 'close', type: 'cancel', text: 'Закрыть' }
-            ]
-        });
-    }
-    
-    // ==================== ПОИСК ====================
-    const searchInput = document.querySelector('.search-input');
-    searchInput.addEventListener('input', function(e) {
-        const query = e.target.value.toLowerCase();
-        if (query.length > 1) {
-            // В реальном приложении здесь фильтрация товаров
-            console.log('Поиск товаров:', query);
-        }
-    });
-</script>
+    </script>
+</body>
+</html>
