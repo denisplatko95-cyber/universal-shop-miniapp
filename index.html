@@ -2,117 +2,230 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>UNIVERSAL SHOP 🛍️</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
+        /* ========== ОСНОВНЫЕ СТИЛИ ========== */
+        :root {
+            /* Светлая тема */
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8f9fa;
+            --bg-card: #ffffff;
+            --text-primary: #1a1a1a;
+            --text-secondary: #6b7280;
+            --accent: #6366f1;
+            --border: #e5e7eb;
+            --shadow: 0 4px 12px rgba(0,0,0,0.05);
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+        }
+        
+        .dark-theme {
+            /* Темная тема */
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #1e293b;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --accent: #818cf8;
+            --border: #334155;
+            --shadow: 0 4px 12px rgba(0,0,0,0.25);
+        }
+        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', system-ui, sans-serif;
-        }
-        
-        :root {
-            --bg-color: #ffffff;
-            --text-color: #1a1a1a;
-            --card-bg: #f8f9fa;
-            --accent: #6366f1;
-            --border: #e5e7eb;
-            --shadow: 0 4px 12px rgba(0,0,0,0.05);
-        }
-        
-        .dark-theme {
-            --bg-color: #0f172a;
-            --text-color: #f1f5f9;
-            --card-bg: #1e293b;
-            --accent: #818cf8;
-            --border: #334155;
-            --shadow: 0 4px 12px rgba(0,0,0,0.2);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
         }
         
         body {
-            background: var(--bg-color);
-            color: var(--text-color);
+            background: var(--bg-primary);
+            color: var(--text-primary);
             transition: all 0.3s ease;
-            padding-bottom: 70px;
+            padding-bottom: 80px;
+            min-height: 100vh;
         }
         
-        /* Шапка */
+        .container {
+            max-width: 100%;
+            padding: 0 16px;
+        }
+        
+        /* ========== ШАПКА ========== */
         .header {
+            position: sticky;
+            top: 0;
+            background: var(--bg-primary);
+            border-bottom: 1px solid var(--border);
             padding: 16px;
+            z-index: 100;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            border-bottom: 1px solid var(--border);
-            position: sticky;
-            top: 0;
-            background: var(--bg-color);
-            z-index: 100;
         }
         
         .logo {
             display: flex;
             align-items: center;
-            gap: 10px;
+            gap: 12px;
             font-weight: 700;
             font-size: 20px;
         }
         
         .logo-icon {
-            color: var(--accent);
-            font-size: 24px;
+            width: 32px;
+            height: 32px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+        
+        .admin-badge {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 600;
+            margin-left: 8px;
         }
         
         .header-controls {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 12px;
         }
         
-        .search-box {
-            background: var(--card-bg);
-            padding: 8px 15px;
-            border-radius: 20px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            width: 180px;
+        .search-container {
+            position: relative;
         }
         
         .search-input {
-            background: transparent;
-            border: none;
-            color: var(--text-color);
-            width: 100%;
+            width: 140px;
+            padding: 10px 15px 10px 40px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            color: var(--text-primary);
+            font-size: 14px;
             outline: none;
+            transition: width 0.3s;
+        }
+        
+        .search-input:focus {
+            width: 180px;
+        }
+        
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-secondary);
+            font-size: 14px;
         }
         
         .theme-toggle {
-            background: var(--card-bg);
-            border: none;
             width: 40px;
             height: 40px;
             border-radius: 50%;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            color: var(--text-primary);
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
-            color: var(--text-color);
+            font-size: 16px;
+            transition: all 0.2s;
         }
         
-        /* Блоки */
-        .container {
+        .theme-toggle:hover {
+            transform: rotate(15deg);
+        }
+        
+        /* ========== АДМИН ПАНЕЛЬ ========== */
+        .admin-panel {
+            background: linear-gradient(135deg, #1e293b, #0f172a);
             padding: 16px;
+            margin: 16px;
+            border-radius: 16px;
+            border: 2px solid #f59e0b;
+        }
+        
+        .admin-title {
+            color: #f59e0b;
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .admin-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        
+        .admin-btn {
+            padding: 12px;
+            border-radius: 12px;
+            border: none;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: transform 0.2s;
+        }
+        
+        .admin-btn:hover {
+            transform: translateY(-2px);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #10b981, #059669);
+            color: white;
+        }
+        
+        .btn-secondary {
+            background: linear-gradient(135deg, #6366f1, #4f46e5);
+            color: white;
+        }
+        
+        .btn-warning {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+        }
+        
+        /* ========== ПОЛКИ С ИГРАМИ ========== */
+        .section {
+            margin: 32px 0 24px 0;
+        }
+        
+        .section-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            padding: 0 16px;
         }
         
         .section-title {
             display: flex;
             align-items: center;
             gap: 10px;
-            margin: 24px 0 16px 0;
             font-size: 18px;
             font-weight: 600;
         }
@@ -121,67 +234,94 @@
             font-size: 22px;
         }
         
-        /* Горизонтальные полки с играми */
+        .add-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: var(--accent);
+            color: white;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
         .shelf {
             display: flex;
             gap: 16px;
+            padding: 0 16px;
             overflow-x: auto;
-            padding: 8px 0 20px 0;
-            scrollbar-width: thin;
+            scrollbar-width: none;
+            -ms-overflow-style: none;
         }
         
         .shelf::-webkit-scrollbar {
-            height: 4px;
+            display: none;
         }
         
         .game-card {
             min-width: 100px;
             text-align: center;
-            background: var(--card-bg);
+            background: var(--bg-card);
             border-radius: 16px;
-            padding: 16px 12px;
+            padding: 20px 16px;
             cursor: pointer;
-            transition: transform 0.2s;
-            border: 1px solid var(--border);
+            border: 2px solid var(--border);
+            transition: all 0.3s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
         }
         
         .game-card:hover {
             transform: translateY(-4px);
+            border-color: var(--accent);
+            box-shadow: var(--shadow);
         }
         
         .game-icon {
-            font-size: 32px;
-            margin-bottom: 10px;
+            font-size: 36px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--accent), #8b5cf6);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
         }
         
         .game-name {
             font-size: 14px;
-            font-weight: 500;
+            font-weight: 600;
         }
         
-        /* Кнопка "Смотреть все" */
-        .view-all {
+        .view-all-btn {
+            display: block;
+            margin: 20px auto 0;
+            padding: 12px 24px;
             background: var(--accent);
             color: white;
             border: none;
-            padding: 10px 20px;
             border-radius: 12px;
-            cursor: pointer;
             font-weight: 500;
-            margin-top: 10px;
+            cursor: pointer;
             display: flex;
             align-items: center;
             gap: 8px;
             justify-content: center;
         }
         
-        /* История просмотров */
+        /* ========== ИСТОРИЯ ПРОСМОТРОВ ========== */
         .history-card {
-            background: var(--card-bg);
+            background: var(--bg-card);
             border-radius: 16px;
-            padding: 16px;
-            margin: 16px 0;
-            border: 1px solid var(--border);
+            padding: 20px;
+            margin: 16px;
+            border: 2px solid var(--border);
         }
         
         .history-header {
@@ -191,189 +331,400 @@
             margin-bottom: 12px;
         }
         
-        .delete-history {
-            background: #ef4444;
+        .history-title {
+            font-weight: 600;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .delete-btn {
+            background: var(--danger);
             color: white;
             border: none;
             padding: 6px 12px;
             border-radius: 8px;
             font-size: 12px;
             cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 4px;
         }
         
-        /* Товары в ленте */
+        .history-item {
+            background: var(--bg-secondary);
+            padding: 12px;
+            border-radius: 12px;
+            margin-top: 8px;
+        }
+        
+        /* ========== ЛЕНТА ТОВАРОВ ========== */
         .products-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
             gap: 16px;
+            padding: 0 16px;
             margin-top: 20px;
         }
         
         .product-card {
-            background: var(--card-bg);
+            background: var(--bg-card);
             border-radius: 16px;
             overflow: hidden;
-            border: 1px solid var(--border);
+            border: 2px solid var(--border);
+            transition: all 0.3s;
             cursor: pointer;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow);
         }
         
         .product-image {
             width: 100%;
             height: 120px;
-            object-fit: cover;
-            background: linear-gradient(45deg, #6366f1, #8b5cf6);
+            background: linear-gradient(135deg, #667eea, #764ba2);
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 32px;
+            font-size: 36px;
         }
         
         .product-info {
-            padding: 12px;
+            padding: 16px;
         }
         
         .product-name {
             font-weight: 600;
             margin-bottom: 6px;
-            font-size: 14px;
+            font-size: 15px;
+            line-height: 1.3;
         }
         
         .product-description {
-            font-size: 12px;
-            color: #6b7280;
-            margin-bottom: 10px;
-            line-height: 1.3;
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+        
+        .product-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         
         .product-price {
             color: var(--accent);
             font-weight: 700;
-            font-size: 16px;
+            font-size: 18px;
         }
         
         .buy-btn {
-            margin-top: 8px;
-            width: 100%;
-            padding: 8px;
-            background: #10b981;
+            background: var(--success);
             color: white;
             border: none;
-            border-radius: 8px;
-            cursor: pointer;
+            padding: 8px 16px;
+            border-radius: 10px;
             font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
         }
         
-        /* Кнопки действий */
+        .buy-btn:hover {
+            background: #059669;
+            transform: scale(1.05);
+        }
+        
+        /* ========== ФОРМЫ ========== */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+        
+        .modal {
+            background: var(--bg-primary);
+            border-radius: 20px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: modalSlide 0.3s ease;
+        }
+        
+        @keyframes modalSlide {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .modal-header {
+            padding: 20px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+        
+        .modal-body {
+            padding: 20px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+        
+        .form-input, .form-textarea, .form-select {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 15px;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+        
+        .form-input:focus, .form-textarea:focus, .form-select:focus {
+            border-color: var(--accent);
+        }
+        
+        .form-textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .file-upload {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 20px;
+            border: 2px dashed var(--border);
+            border-radius: 12px;
+            cursor: pointer;
+            text-align: center;
+            justify-content: center;
+        }
+        
+        .file-upload:hover {
+            border-color: var(--accent);
+        }
+        
+        .submit-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--accent), #4f46e5);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+        }
+        
+        /* ========== КНОПКИ ДЕЙСТВИЙ ========== */
         .action-buttons {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            background: var(--bg-color);
-            padding: 12px 16px;
+            background: var(--bg-primary);
             border-top: 1px solid var(--border);
-            display: flex;
+            padding: 12px 16px;
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
             gap: 12px;
-            z-index: 100;
+            z-index: 99;
         }
         
         .action-btn {
-            flex: 1;
-            padding: 12px;
+            padding: 14px;
             border-radius: 12px;
             border: none;
             font-weight: 500;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: opacity 0.2s;
-        }
-        
-        .primary-btn {
-            background: var(--accent);
-            color: white;
-        }
-        
-        .secondary-btn {
-            background: var(--card-bg);
-            color: var(--text-color);
-            border: 1px solid var(--border);
-        }
-        
-        /* Админ кнопки */
-        .admin-buttons {
-            display: none;
-            margin: 16px 0;
-            gap: 10px;
             display: flex;
             flex-direction: column;
-        }
-        
-        .add-btn {
-            background: #10b981;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: 500;
-            display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 8px;
+            gap: 6px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            transition: all 0.2s;
         }
         
-        .admin-btn {
-            background: #8b5cf6;
+        .action-btn:hover {
+            background: var(--accent);
             color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
+            transform: translateY(-2px);
         }
         
-        /* Адаптивность */
+        .action-icon {
+            font-size: 20px;
+        }
+        
+        .action-text {
+            font-size: 12px;
+        }
+        
+        /* ========== ЧАТ И БОНУСЫ ========== */
+        .chat-container, .bonuses-container {
+            padding: 20px;
+        }
+        
+        .chat-messages {
+            max-height: 400px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+        
+        .message {
+            margin-bottom: 16px;
+            padding: 12px 16px;
+            border-radius: 16px;
+            max-width: 80%;
+        }
+        
+        .message-user {
+            background: var(--accent);
+            color: white;
+            margin-left: auto;
+        }
+        
+        .message-admin {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+        }
+        
+        .chat-input {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .bonus-card {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            padding: 20px;
+            border-radius: 16px;
+            margin-bottom: 16px;
+        }
+        
+        .bonus-code {
+            font-family: monospace;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 12px;
+            border-radius: 8px;
+            margin-top: 12px;
+            display: inline-block;
+        }
+        
+        /* ========== УТИЛИТЫ ========== */
+        .hidden {
+            display: none !important;
+        }
+        
+        .text-center {
+            text-align: center;
+        }
+        
+        .text-muted {
+            color: var(--text-secondary);
+        }
+        
+        .mt-4 { margin-top: 16px; }
+        .mb-4 { margin-bottom: 16px; }
+        .p-4 { padding: 16px; }
+        
+        /* ========== АДАПТИВ ========== */
         @media (max-width: 480px) {
-            .search-box {
-                width: 140px;
+            .header-controls {
+                gap: 8px;
+            }
+            
+            .search-input {
+                width: 120px;
+            }
+            
+            .search-input:focus {
+                width: 150px;
             }
             
             .products-grid {
-                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                grid-template-columns: 1fr 1fr;
             }
             
             .admin-buttons {
-                flex-direction: column;
+                grid-template-columns: 1fr;
             }
         }
         
-        /* Анимации */
+        /* ========== АНИМАЦИИ ========== */
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
         .fade-in {
             animation: fadeIn 0.3s ease-out;
         }
         
-        /* Админ-статус */
-        .admin-badge {
-            background: #8b5cf6;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            font-size: 12px;
-            font-weight: 600;
-            margin-left: 10px;
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
         }
     </style>
 </head>
@@ -383,12 +734,12 @@
         <div class="logo">
             <div class="logo-icon">🛍️</div>
             <span>UNIVERSAL SHOP</span>
-            <div id="adminBadge" class="admin-badge" style="display: none;">👑 АДМИН</div>
+            <div id="adminBadge" class="admin-badge">👑 АДМИН</div>
         </div>
         <div class="header-controls">
-            <div class="search-box">
-                <i class="fas fa-search"></i>
-                <input type="text" class="search-input" placeholder="Поиск товаров...">
+            <div class="search-container">
+                <i class="fas fa-search search-icon"></i>
+                <input type="text" class="search-input" placeholder="Поиск..." id="searchInput">
             </div>
             <button class="theme-toggle" id="themeToggle">
                 <i class="fas fa-moon"></i>
@@ -396,202 +747,530 @@
         </div>
     </div>
     
-    <!-- Админ кнопки -->
-    <div class="container admin-buttons" id="adminButtons">
-        <button class="admin-btn" onclick="showAddGameForm()">
-            <i class="fas fa-plus-circle"></i> Добавить игру/приложение
-        </button>
-        <button class="add-btn" onclick="showAddProductForm()">
-            <i class="fas fa-cube"></i> Добавить товар
-        </button>
-        <button class="admin-btn" onclick="showOrders()" style="background: #f59e0b;">
-            <i class="fas fa-shopping-cart"></i> Управление заказами
-        </button>
+    <!-- Админ панель (только для админа) -->
+    <div id="adminPanel" class="admin-panel hidden">
+        <div class="admin-title">
+            <i class="fas fa-crown"></i>
+            Панель администратора
+        </div>
+        <div class="admin-buttons">
+            <button class="admin-btn btn-primary" onclick="showAddGameModal()">
+                <i class="fas fa-plus"></i> Игру
+            </button>
+            <button class="admin-btn btn-secondary" onclick="showAddProductModal()">
+                <i class="fas fa-cube"></i> Товар
+            </button>
+            <button class="admin-btn btn-warning" onclick="showAddAppModal()">
+                <i class="fas fa-mobile-alt"></i> Приложение
+            </button>
+            <button class="admin-btn" style="background: #8b5cf6; color: white;" onclick="manageOrders()">
+                <i class="fas fa-shopping-cart"></i> Заказы
+            </button>
+        </div>
     </div>
     
+    <!-- Основной контент -->
     <div class="container">
         <!-- Блок "Игры" -->
-        <div class="section-title">
-            <div class="section-icon">🎮</div>
-            <span>Игры</span>
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">
+                    <div class="section-icon">🎮</div>
+                    <span>Игры</span>
+                </div>
+                <button id="addGameBtn" class="add-btn hidden" onclick="showAddGameModal()">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            <div class="shelf" id="gamesShelf">
+                <!-- Игры загружаются через JS -->
+            </div>
+            <button class="view-all-btn" onclick="showAllGames()">
+                <i class="fas fa-eye"></i> Смотреть все
+            </button>
         </div>
-        <div class="shelf" id="gamesShelf">
-            <!-- Игры загружаются через JS -->
-        </div>
-        <button class="view-all" onclick="showAllGames()">
-            <i class="fas fa-eye"></i> Смотреть все
-        </button>
         
         <!-- Блок "Приложения" -->
-        <div class="section-title">
-            <div class="section-icon">📱</div>
-            <span>Приложения Telegram</span>
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">
+                    <div class="section-icon">📱</div>
+                    <span>Приложения Telegram</span>
+                </div>
+                <button id="addAppBtn" class="add-btn hidden" onclick="showAddAppModal()">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            <div class="shelf" id="appsShelf">
+                <!-- Приложения загружаются через JS -->
+            </div>
+            <button class="view-all-btn" onclick="showAllApps()">
+                <i class="fas fa-eye"></i> Смотреть все
+            </button>
         </div>
-        <div class="shelf" id="appsShelf">
-            <!-- Приложения загружаются через JS -->
-        </div>
-        <button class="view-all" onclick="showAllApps()">
-            <i class="fas fa-eye"></i> Смотреть все
-        </button>
         
         <!-- Блок "Смотрел в последний раз" -->
-        <div class="section-title">
-            <div class="section-icon">🕒</div>
-            <span>Смотрел в последний раз</span>
-        </div>
-        <div class="history-card" id="historyCard">
-            <!-- История загружается через JS -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">
+                    <div class="section-icon">🕒</div>
+                    <span>Смотрел в последний раз</span>
+                </div>
+            </div>
+            <div class="history-card" id="historyCard">
+                <!-- История загружается через JS -->
+            </div>
         </div>
         
         <!-- Общая лента товаров -->
-        <div class="section-title">
-            <div class="section-icon">🔥</div>
-            <span>Все товары</span>
-        </div>
-        <div class="products-grid" id="productsGrid">
-            <!-- Товары загружаются через JS -->
+        <div class="section">
+            <div class="section-header">
+                <div class="section-title">
+                    <div class="section-icon">🔥</div>
+                    <span>Все товары</span>
+                </div>
+            </div>
+            <div class="products-grid" id="productsGrid">
+                <!-- Товары загружаются через JS -->
+            </div>
         </div>
     </div>
     
     <!-- Кнопки действий -->
     <div class="action-buttons">
-        <button class="action-btn secondary-btn" onclick="openSupport()">
-            <i class="fas fa-comment"></i> Поддержка
+        <button class="action-btn" onclick="openChat()">
+            <i class="fas fa-comment action-icon"></i>
+            <span class="action-text">Поддержка</span>
         </button>
-        <button class="action-btn secondary-btn" onclick="openBonuses()">
-            <i class="fas fa-gift"></i> Бонусы
+        <button class="action-btn" onclick="openBonuses()">
+            <i class="fas fa-gift action-icon"></i>
+            <span class="action-text">Бонусы</span>
         </button>
-        <button class="action-btn primary-btn" onclick="openProfile()">
-            <i class="fas fa-user"></i> Профиль
+        <button class="action-btn" onclick="openProfile()">
+            <i class="fas fa-user action-icon"></i>
+            <span class="action-text">Профиль</span>
         </button>
     </div>
+    
+    <!-- Модальные окна -->
+    <div id="addGameModal" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">➕ Добавить игру</div>
+                <button class="close-btn" onclick="closeModal('addGameModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Название игры</label>
+                    <input type="text" class="form-input" id="gameName" placeholder="Например: Fortnite">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Иконка (эмодзи)</label>
+                    <input type="text" class="form-input" id="gameIcon" placeholder="🎮" maxlength="2">
+                </div>
+                <button class="submit-btn" onclick="addGame()">
+                    <i class="fas fa-save"></i> Создать игру
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Модалка добавления товара -->
+    <div id="addProductModal" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">📦 Добавить товар</div>
+                <button class="close-btn" onclick="closeModal('addProductModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label class="form-label">Категория</label>
+                    <select class="form-select" id="productCategory">
+                        <option value="">Выберите игру/приложение</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Название товара</label>
+                    <input type="text" class="form-input" id="productName" placeholder="Например: 1000 V-bucks">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Описание</label>
+                    <textarea class="form-textarea" id="productDescription" placeholder="Описание товара..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Цена</label>
+                    <div style="display: flex; gap: 10px;">
+                        <input type="number" class="form-input" id="productPrice" placeholder="99.99" style="flex: 1;">
+                        <select class="form-select" id="productCurrency" style="width: 100px;">
+                            <option value="$">USD ($)</option>
+                            <option value="₽">RUB (₽)</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Иконка (эмодзи)</label>
+                    <input type="text" class="form-input" id="productIcon" placeholder="💰" maxlength="2">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Фото товара (URL)</label>
+                    <input type="text" class="form-input" id="productImage" placeholder="https://example.com/image.jpg">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Данные для выдачи*</label>
+                    <textarea class="form-textarea" id="productData" placeholder="Логин: player123&#10;Пароль: pass456&#10;&#10;Или ключ активации: ABC-DEF-123" rows="4"></textarea>
+                    <small class="text-muted">Эти данные получит покупатель после оплаты</small>
+                </div>
+                <button class="submit-btn" onclick="addProduct()">
+                    <i class="fas fa-save"></i> Создать товар
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Модалка оплаты -->
+    <div id="paymentModal" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">💳 Оплата товара</div>
+                <button class="close-btn" onclick="closeModal('paymentModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div id="paymentInfo"></div>
+                <div class="form-group">
+                    <label class="form-label">Выберите способ оплаты:</label>
+                    <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 15px;">
+                        <button class="admin-btn btn-primary" onclick="selectPayment('crypto')">
+                            <i class="fas fa-coins"></i> Криптовалюта (USDT/TON)
+                        </button>
+                        <button class="admin-btn btn-secondary" onclick="selectPayment('rub')">
+                            <i class="fas fa-ruble-sign"></i> Рубли по реквизитам
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Модалка крипто-оплаты -->
+    <div id="cryptoModal" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">💎 Оплата криптовалютой</div>
+                <button class="close-btn" onclick="closeModal('cryptoModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center mb-4">
+                    <div style="font-size: 48px;">💰</div>
+                    <h3 style="margin: 10px 0;">Оплата USDT/TON</h3>
+                    <p>После оплаты товар будет выдан автоматически</p>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Сумма к оплате:</label>
+                    <div style="font-size: 32px; font-weight: bold; color: var(--accent); text-align: center;" id="cryptoAmount">
+                        $0.00
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Адрес для оплаты:</label>
+                    <div style="background: var(--bg-secondary); padding: 15px; border-radius: 12px; font-family: monospace; word-break: break-all; margin-top: 10px;">
+                        TQwPk1e4j9w7K...Truncated...Z8m2
+                    </div>
+                    <button class="admin-btn btn-secondary mt-4" onclick="copyText('TQwPk1e4j9w7K...Truncated...Z8m2')">
+                        <i class="fas fa-copy"></i> Скопировать адрес
+                    </button>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Сеть:</label>
+                    <select class="form-select">
+                        <option>TON (The Open Network)</option>
+                        <option>TRC-20 (Tron)</option>
+                        <option>ERC-20 (Ethereum)</option>
+                    </select>
+                </div>
+                
+                <button class="submit-btn pulse" onclick="completeCryptoPayment()">
+                    <i class="fas fa-check"></i> Я оплатил
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Модалка рублевой оплаты -->
+    <div id="rubModal" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">₽ Оплата по реквизитам</div>
+                <button class="close-btn" onclick="closeModal('rubModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center mb-4">
+                    <div style="font-size: 48px;">🏦</div>
+                    <h3 style="margin: 10px 0;">Реквизиты для перевода</h3>
+                    <p>После оплаты администратор проверит перевод и выдаст товар</p>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Сумма к оплате:</label>
+                    <div style="font-size: 32px; font-weight: bold; color: var(--accent); text-align: center;" id="rubAmount">
+                        0 ₽
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Банковские реквизиты:</label>
+                    <div style="background: var(--bg-secondary); padding: 15px; border-radius: 12px; margin-top: 10px;">
+                        <div style="margin-bottom: 8px;">
+                            <strong>СБЕРБАНК:</strong><br>
+                            Карта: 2202 2001 2345 6789<br>
+                            Получатель: ИВАН И.И.
+                        </div>
+                        <div style="margin-bottom: 8px;">
+                            <strong>ТИНЬКОФФ:</strong><br>
+                            Карта: 5536 9137 1234 5678<br>
+                            Получатель: ИВАН И.И.
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Комментарий к переводу:</label>
+                    <div style="background: var(--bg-secondary); padding: 15px; border-radius: 12px; font-family: monospace; word-break: break-all; margin-top: 10px;">
+                        US-<span id="orderId">0001</span>
+                    </div>
+                    <small class="text-muted">Укажите этот комментарий при переводе</small>
+                </div>
+                
+                <button class="submit-btn" onclick="completeRubPayment()">
+                    <i class="fas fa-check"></i> Я перевел(а) деньги
+                </button>
+                
+                <button class="admin-btn btn-secondary mt-4" onclick="openSupport()">
+                    <i class="fas fa-headset"></i> Связаться с поддержкой
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Модалка чата -->
+    <div id="chatModal" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">💬 Поддержка</div>
+                <button class="close-btn" onclick="closeModal('chatModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="chat-container">
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="message message-admin">
+                            <strong>Поддержка:</strong> Здравствуйте! Чем могу помочь?
+                        </div>
+                    </div>
+                    <div class="chat-input">
+                        <input type="text" class="form-input" id="chatInput" placeholder="Введите сообщение...">
+                        <button class="admin-btn btn-primary" onclick="sendMessage()">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Модалка бонусов -->
+    <div id="bonusesModal" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">🎁 Бонусы и акции</div>
+                <button class="close-btn" onclick="closeModal('bonusesModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="bonuses-container">
+                    <div class="bonus-card">
+                        <h3>🎉 Приветственный бонус</h3>
+                        <p>10% скидка на первую покупку</p>
+                        <div class="bonus-code">WELCOME10</div>
+                    </div>
+                    
+                    <div class="bonus-card" style="background: linear-gradient(135deg, #6366f1, #4f46e5);">
+                        <h3>👥 Реферальная программа</h3>
+                        <p>Приводите друзей и получайте 5% с каждой их покупки</p>
+                    </div>
+                    
+                    <div class="bonus-card" style="background: linear-gradient(135deg, #10b981, #059669);">
+                        <h3>🏆 Программа лояльности</h3>
+                        <p>Каждые 5 покупок = 1 бесплатный товар на выбор</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Модалка профиля -->
+    <div id="profileModal" class="modal-overlay hidden">
+        <div class="modal">
+            <div class="modal-header">
+                <div class="modal-title">👤 Профиль</div>
+                <button class="close-btn" onclick="closeModal('profileModal')">×</button>
+            </div>
+            <div class="modal-body">
+                <div class="text-center mb-4">
+                    <div style="font-size: 64px; width: 80px; height: 80px; background: linear-gradient(135deg, var(--accent), #8b5cf6); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; margin: 0 auto 15px;">
+                        👤
+                    </div>
+                    <h3 id="userName">Пользователь</h3>
+                    <p class="text-muted" id="userId">ID: ...</p>
+                </div>
+                
+                <div style="background: var(--bg-secondary); padding: 20px; border-radius: 16px; margin-bottom: 20px;">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span>Всего покупок:</span>
+                        <strong>0</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                        <span>Потрачено:</span>
+                        <strong>$0.00</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>Бонусные баллы:</span>
+                        <strong style="color: #f59e0b;">100</strong>
+                    </div>
+                </div>
+                
+                <button class="admin-btn btn-secondary" onclick="showUserOrders()">
+                    <i class="fas fa-shopping-cart"></i> Мои заказы
+                </button>
+            </div>
+        </div>
+    </div>
 
+    <!-- Основной скрипт -->
     <script>
-        // ==================== ИНИЦИАЛИЗАЦИЯ ====================
+        // ==================== КОНСТАНТЫ И ПЕРЕМЕННЫЕ ====================
         const tg = window.Telegram.WebApp;
+        const ADMIN_IDS = [8381902355]; // Ваш ID админа
         
-        // Расширяем на весь экран
-        tg.expand();
-        tg.enableClosingConfirmation();
+        let currentUser = null;
+        let isAdmin = false;
+        let selectedProduct = null;
         
-        // Данные пользователя из Telegram
-        const user = tg.initDataUnsafe.user;
-        const userId = user?.id || 'неизвестно';
-        const userName = user?.first_name || 'Пользователь';
-        
-        // ПРОВЕРКА НА АДМИНА - ВАШ ID: 8381902355
-        const ADMIN_IDS = [8381902355]; // Ваш Telegram ID здесь
-        const isAdmin = ADMIN_IDS.includes(Number(userId));
-        
-        console.log('Пользователь Telegram:', user);
-        console.log('ID пользователя:', userId);
-        console.log('Это админ?:', isAdmin);
-        
-        // ==================== ТЕМА ====================
-        let isDarkTheme = tg.colorScheme === 'dark';
-        
-        // Устанавливаем тему из Telegram
-        if (isDarkTheme) {
-            document.body.classList.add('dark-theme');
-            document.getElementById('themeToggle').innerHTML = '<i class="fas fa-sun"></i>';
-        }
-        
-        // ==================== ДАННЫЕ ====================
-        // Игры и приложения
-        let games = [
-            { id: 1, icon: '🎮', name: 'Fortnite', type: 'game' },
-            { id: 2, icon: '⚔️', name: 'Minecraft', type: 'game' },
-            { id: 3, icon: '🚗', name: 'GTA V', type: 'game' },
-            { id: 4, icon: '🔫', name: 'CS:GO', type: 'game' }
+        // Данные магазина (в реальном приложении будут с сервера)
+        let games = JSON.parse(localStorage.getItem('universal_shop_games')) || [
+            { id: 1, name: 'Fortnite', icon: '🎮', type: 'game' },
+            { id: 2, name: 'Minecraft', icon: '⚔️', type: 'game' },
+            { id: 3, name: 'GTA V', icon: '🚗', type: 'game' },
+            { id: 4, name: 'CS:GO', icon: '🔫', type: 'game' }
         ];
         
-        let apps = [
-            { id: 5, icon: '📈', name: 'Продвижение', type: 'app' },
-            { id: 6, icon: '🎨', name: 'Дизайн', type: 'app' },
-            { id: 7, icon: '🎁', name: 'NFT-подарки', type: 'app' }
+        let apps = JSON.parse(localStorage.getItem('universal_shop_apps')) || [
+            { id: 5, name: 'Продвижение', icon: '📈', type: 'app' },
+            { id: 6, name: 'Дизайн', icon: '🎨', type: 'app' },
+            { id: 7, name: 'NFT-подарки', icon: '🎁', type: 'app' }
         ];
         
-        let products = [
+        let products = JSON.parse(localStorage.getItem('universal_shop_products')) || [
             { 
                 id: 101, 
                 name: 'Аккаунт Fortnite Pro', 
-                desc: 'Редкие скины + 5000 V-bucks', 
-                price: '$24.99', 
+                description: 'Редкие скины + 5000 V-bucks', 
+                price: 24.99, 
+                currency: '$',
                 icon: '👤',
-                gameId: 1,
-                data: 'Логин: fortnite_pro_123\nПароль: QwErTy2024\n\nВажно: смените пароль после входа!'
+                categoryId: 1,
+                image: '',
+                deliveryData: 'Логин: fortnite_pro_123\nПароль: QwErTy2024\n\nВажно: смените пароль после входа!'
             },
             { 
                 id: 102, 
                 name: '1000 В-баксов', 
-                desc: 'Игровая валюта Fortnite', 
-                price: '$9.99', 
+                description: 'Игровая валюта Fortnite', 
+                price: 9.99, 
+                currency: '$',
                 icon: '💰',
-                gameId: 1,
-                data: 'Код: FN-7X9P-2K4L-8M3Q\n\nАктивация: Настройки → Счет → Ввести код'
-            },
-            { 
-                id: 103, 
-                name: 'Дизайн канала Telegram', 
-                desc: 'Уникальный дизайн + баннер', 
-                price: '$49.99', 
-                icon: '🎨',
-                gameId: 6,
-                data: 'Ссылка на Figma: https://figma.com/file/...\n\nДанные для входа: design@mail.com / pass123'
+                categoryId: 1,
+                image: '',
+                deliveryData: 'Код: FN-7X9P-2K4L-8M3Q\n\nАктивация: Настройки → Счет → Ввести код'
             }
         ];
         
-        // История просмотров
-        let viewHistory = JSON.parse(localStorage.getItem('viewHistory') || '[]');
+        let viewHistory = JSON.parse(localStorage.getItem('universal_shop_history')) || [];
         
-        // ==================== ЗАГРУЗКА ПРИЛОЖЕНИЯ ====================
+        // ==================== ИНИЦИАЛИЗАЦИЯ ====================
         document.addEventListener('DOMContentLoaded', function() {
-            // Показываем админ-панель если админ
-            if (isAdmin) {
-                document.getElementById('adminBadge').style.display = 'inline-block';
-                document.getElementById('adminButtons').style.display = 'flex';
-                tg.showAlert(`👑 Добро пожаловать, администратор ${userName}! Ваш ID: ${userId}`);
+            initApp();
+        });
+        
+        function initApp() {
+            // Настройка Telegram WebApp
+            tg.expand();
+            tg.enableClosingConfirmation();
+            
+            // Получаем данные пользователя
+            const user = tg.initDataUnsafe.user;
+            currentUser = user;
+            
+            if (user) {
+                document.getElementById('userName').textContent = user.first_name || 'Пользователь';
+                document.getElementById('userId').textContent = `ID: ${user.id}`;
+                
+                // Проверка на админа
+                isAdmin = ADMIN_IDS.includes(Number(user.id));
+                if (isAdmin) {
+                    document.getElementById('adminPanel').classList.remove('hidden');
+                    document.getElementById('addGameBtn').classList.remove('hidden');
+                    document.getElementById('addAppBtn').classList.remove('hidden');
+                    tg.showAlert(`👑 Добро пожаловать, администратор ${user.first_name}!`);
+                }
+            } else {
+                document.getElementById('userName').textContent = 'Гость';
+                document.getElementById('userId').textContent = 'Войдите через Telegram';
             }
             
-            // Приветствие
-            setTimeout(() => {
-                tg.showPopup({
-                    title: `👋 Привет, ${userName}!`,
-                    message: isAdmin 
-                        ? 'Добро пожаловать в панель управления магазином!'
-                        : 'Добро пожаловать в UNIVERSAL SHOP!',
-                    buttons: [{ type: 'default', text: 'Начать покупки', id: 'start' }]
-                });
-            }, 1000);
+            // Установка темы
+            setupTheme();
             
-            // Загружаем данные
+            // Загрузка данных
             loadGames();
             loadApps();
             loadProducts();
             updateHistory();
             
-            // Настраиваем кнопку покупки
-            tg.MainButton.setText("🛒 Перейти к оплате");
-            tg.MainButton.onClick(buyProduct);
-            tg.MainButton.hide();
+            // Настройка поиска
+            setupSearch();
             
-            // Настройка переключения темы
-            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
-        });
+            console.log('UNIVERSAL SHOP успешно загружен!');
+        }
         
         // ==================== ТЕМА ====================
-        function toggleTheme() {
-            if (isDarkTheme) {
-                document.body.classList.remove('dark-theme');
-                document.getElementById('themeToggle').innerHTML = '<i class="fas fa-moon"></i>';
-                tg.setHeaderColor('#ffffff');
-                isDarkTheme = false;
-            } else {
-                document.body.classList.add('dark-theme');
-                document.getElementById('themeToggle').innerHTML = '<i class="fas fa-sun"></i>';
-                tg.setHeaderColor('#0f172a');
-                isDarkTheme = true;
+        function setupTheme() {
+            const isDark = tg.colorScheme === 'dark';
+            if (isDark) {
+                enableDarkTheme();
             }
+            
+            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
+        }
+        
+        function toggleTheme() {
+            if (document.body.classList.contains('dark-theme')) {
+                disableDarkTheme();
+            } else {
+                enableDarkTheme();
+            }
+        }
+        
+        function enableDarkTheme() {
+            document.body.classList.add('dark-theme');
+            document.getElementById('themeToggle').innerHTML = '<i class="fas fa-sun"></i>';
+            tg.setHeaderColor('#0f172a');
+        }
+        
+        function disableDarkTheme() {
+            document.body.classList.remove('dark-theme');
+            document.getElementById('themeToggle').innerHTML = '<i class="fas fa-moon"></i>';
+            tg.setHeaderColor('#ffffff');
         }
         
         // ==================== ЗАГРУЗКА ДАННЫХ ====================
@@ -632,19 +1311,25 @@
             grid.innerHTML = '';
             
             products.forEach(product => {
+                const category = [...games, ...apps].find(c => c.id === product.categoryId);
                 const card = document.createElement('div');
                 card.className = 'product-card fade-in';
                 card.innerHTML = `
-                    <div class="product-image" style="background: linear-gradient(45deg, #6366f1, #8b5cf6);">
+                    <div class="product-image">
                         ${product.icon}
                     </div>
                     <div class="product-info">
                         <div class="product-name">${product.name}</div>
-                        <div class="product-description">${product.desc}</div>
-                        <div class="product-price">${product.price}</div>
-                        <button class="buy-btn" onclick="selectProduct(${product.id})">
-                            Купить
-                        </button>
+                        <div class="product-description">
+                            ${product.description}<br>
+                            <small style="color: var(--accent);">${category ? category.name : 'Игра'}</small>
+                        </div>
+                        <div class="product-footer">
+                            <div class="product-price">${product.currency}${product.price}</div>
+                            <button class="buy-btn" onclick="selectProduct(${product.id})">
+                                Купить
+                            </button>
+                        </div>
                     </div>
                 `;
                 grid.appendChild(card);
@@ -653,21 +1338,36 @@
         
         function updateHistory() {
             const historyCard = document.getElementById('historyCard');
+            
             if (viewHistory.length > 0) {
-                const lastProduct = viewHistory[viewHistory.length - 1];
+                const lastItem = viewHistory[viewHistory.length - 1];
                 historyCard.innerHTML = `
                     <div class="history-header">
-                        <span>${lastProduct.name}</span>
-                        <button class="delete-history" onclick="deleteHistory()">Удалить</button>
+                        <div class="history-title">
+                            <i class="fas fa-clock"></i>
+                            <span>${lastItem.name}</span>
+                        </div>
+                        <button class="delete-btn" onclick="deleteHistoryItem()">
+                            <i class="fas fa-trash"></i> Удалить
+                        </button>
                     </div>
-                    <div>Цена: <strong>${lastProduct.price}</strong> • Просмотрен: ${lastProduct.time}</div>
+                    <div class="history-item">
+                        <div><strong>Цена:</strong> ${lastItem.currency}${lastItem.price}</div>
+                        <div><strong>Просмотрен:</strong> ${lastItem.time}</div>
+                    </div>
                 `;
             } else {
                 historyCard.innerHTML = `
                     <div class="history-header">
-                        <span>История просмотров пуста</span>
+                        <div class="history-title">
+                            <i class="fas fa-clock"></i>
+                            <span>История просмотров</span>
+                        </div>
                     </div>
-                    <div>Здесь будет последний просмотренный товар</div>
+                    <div class="text-center text-muted p-4">
+                        <i class="fas fa-eye-slash" style="font-size: 24px; margin-bottom: 10px;"></i>
+                        <p>Вы еще не просматривали товары</p>
+                    </div>
                 `;
             }
         }
@@ -675,246 +1375,31 @@
         // ==================== ОТКРЫТИЕ КАТЕГОРИЙ ====================
         function openCategory(category) {
             if (isAdmin) {
-                // Для админа - меню управления
                 tg.showPopup({
                     title: `👑 ${category.icon} ${category.name}`,
-                    message: `Управление категорией "${category.name}":\n\nВыберите действие:`,
+                    message: `Управление категорией:\n\nВыберите действие:`,
                     buttons: [
                         { id: 'add_product', type: 'default', text: '➕ Добавить товар' },
+                        { id: 'view_products', type: 'default', text: '👁️ Просмотреть товары' },
                         { id: 'edit', type: 'default', text: '✏️ Редактировать' },
-                        { id: 'view', type: 'default', text: '👁️ Просмотреть товары' },
-                        { id: 'delete', type: 'destructive', text: '🗑️ Удалить категорию' },
                         { id: 'close', type: 'cancel', text: 'Закрыть' }
                     ]
                 }).then(result => {
                     if (result === 'add_product') {
                         showAddProductToCategory(category);
+                    } else if (result === 'view_products') {
+                        showCategoryProducts(category);
                     } else if (result === 'edit') {
                         editCategory(category);
-                    } else if (result === 'view') {
-                        viewCategoryProducts(category);
-                    } else if (result === 'delete') {
-                        deleteCategory(category);
                     }
                 });
             } else {
-                // Для обычных пользователей
-                tg.showPopup({
-                    title: `${category.icon} ${category.name}`,
-                    message: `Товары в категории "${category.name}"`,
-                    buttons: [
-                        { id: 'view', type: 'default', text: '👁️ Просмотреть товары' },
-                        { id: 'close', type: 'cancel', text: 'Закрыть' }
-                    ]
-                });
+                showCategoryProducts(category);
             }
         }
         
-        // ==================== ПОКУПКА ТОВАРОВ ====================
-        let selectedProduct = null;
-        
-        function selectProduct(productId) {
-            selectedProduct = products.find(p => p.id === productId);
-            
-            // Добавляем в историю
-            viewHistory.push({
-                id: selectedProduct.id,
-                name: selectedProduct.name,
-                price: selectedProduct.price,
-                time: new Date().toLocaleTimeString()
-            });
-            localStorage.setItem('viewHistory', JSON.stringify(viewHistory));
-            updateHistory();
-            
-            // Показываем информацию о товаре
-            tg.showPopup({
-                title: `🎯 ${selectedProduct.name}`,
-                message: `${selectedProduct.desc}\n\nЦена: ${selectedProduct.price}\n\nВыберите способ оплаты:`,
-                buttons: [
-                    { id: 'crypto', type: 'default', text: '💎 Крипто (USDT/TON)' },
-                    { id: 'rub', type: 'default', text: '₽ Рубли по реквизитам' },
-                    { id: 'cancel', type: 'cancel', text: 'Отмена' }
-                ]
-            }).then(result => {
-                if (result === 'crypto') {
-                    startCryptoPayment();
-                } else if (result === 'rub') {
-                    startRubPayment();
-                }
-            });
-            
-            // Активируем кнопку покупки
-            tg.MainButton.setText(`Купить за ${selectedProduct.price}`);
-            tg.MainButton.show();
-        }
-        
-        function buyProduct() {
-            if (!selectedProduct) {
-                tg.showAlert('Сначала выберите товар!');
-                return;
-            }
-            
-            tg.showPopup({
-                title: 'Подтверждение покупки',
-                message: `Вы уверены, что хотите купить "${selectedProduct.name}" за ${selectedProduct.price}?`,
-                buttons: [
-                    { id: 'confirm', type: 'destructive', text: '✅ Да, купить' },
-                    { id: 'cancel', type: 'cancel', text: 'Отмена' }
-                ]
-            }).then(result => {
-                if (result === 'confirm') {
-                    startCryptoPayment();
-                }
-            });
-        }
-        
-        // ==================== ОПЛАТА ====================
-        function startCryptoPayment() {
-            tg.showAlert(`💎 Крипто-оплата\n\nТовар: ${selectedProduct.name}\nСумма: ${selectedProduct.price}\n\nПосле оплаты товар будет выдан автоматически в течение 1-2 минут.`);
-            
-            // Имитация успешной оплаты
-            setTimeout(() => {
-                deliverProduct('crypto');
-            }, 2000);
-        }
-        
-        function startRubPayment() {
-            tg.showPopup({
-                title: '₽ Оплата по реквизитам',
-                message: `Товар: ${selectedProduct.name}\nСумма: ${selectedProduct.price}\n\nРеквизиты для перевода:\n\n💳 СБЕРБАНК: 2202 2001 2345 6789\n👤 ИВАН И.И.\n\nПосле перевода отправьте скриншот чека в поддержку.`,
-                buttons: [
-                    { id: 'support', type: 'default', text: '📞 Открыть поддержку' },
-                    { id: 'cancel', type: 'cancel', text: 'Понятно' }
-                ]
-            }).then(result => {
-                if (result === 'support') {
-                    openSupport();
-                }
-            });
-            
-            // Отправка заказа админу
-            sendOrderToAdminGroup('rub');
-        }
-        
-        function deliverProduct(paymentMethod) {
-            tg.showAlert(`✅ Оплата подтверждена!\n\nТовар: ${selectedProduct.name}\n\n📦 ДАННЫЕ ДЛЯ ПОЛУЧЕНИЯ:\n\n${selectedProduct.data}\n\n⚠️ Сохраните эти данные!`);
-            
-            // Отправляем данные в бота
-            tg.sendData(JSON.stringify({
-                action: 'product_delivered',
-                productId: selectedProduct.id,
-                userId: userId,
-                userName: userName,
-                paymentMethod: paymentMethod
-            }));
-            
-            // Скрываем кнопку покупки
-            tg.MainButton.hide();
-            selectedProduct = null;
-        }
-        
-        function sendOrderToAdminGroup(paymentMethod) {
-            tg.showAlert('📋 Заказ создан! Ожидайте проверки оплаты администратором.');
-            
-            // В реальности здесь запрос к бэкенду
-            console.log('Заказ отправлен админам:', {
-                product: selectedProduct,
-                user: user,
-                paymentMethod: paymentMethod,
-                timestamp: new Date().toISOString()
-            });
-        }
-        
-        // ==================== АДМИН-ФУНКЦИИ ====================
-        function showAddGameForm() {
-            tg.showPopup({
-                title: '➕ Добавить игру/приложение',
-                message: 'Введите данные новой категории:',
-                buttons: [
-                    { id: 'game', type: 'default', text: '🎮 Игра' },
-                    { id: 'app', type: 'default', text: '📱 Приложение' },
-                    { id: 'cancel', type: 'cancel', text: 'Отмена' }
-                ]
-            }).then(result => {
-                if (result === 'game' || result === 'app') {
-                    tg.showAlert(`Форма создания ${result === 'game' ? 'игры' : 'приложения'}:\n\n• Иконка: 🎮\n• Название: Новая категория\n• Тип: ${result === 'game' ? 'Игра' : 'Приложение'}\n\nСоздать?`);
-                }
-            });
-        }
-        
-        function showAddProductForm() {
-            tg.showPopup({
-                title: '📦 Добавить товар',
-                message: 'Выберите категорию для товара:',
-                buttons: [
-                    ...games.map(game => ({ 
-                        id: `game_${game.id}`, 
-                        type: 'default', 
-                        text: `${game.icon} ${game.name}` 
-                    })),
-                    ...apps.map(app => ({ 
-                        id: `app_${app.id}`, 
-                        type: 'default', 
-                        text: `${app.icon} ${app.name}` 
-                    })),
-                    { id: 'cancel', type: 'cancel', text: 'Отмена' }
-                ]
-            }).then(result => {
-                if (result && result !== 'cancel') {
-                    const categoryId = parseInt(result.split('_')[1]);
-                    const category = [...games, ...apps].find(c => c.id === categoryId);
-                    showProductCreationForm(category);
-                }
-            });
-        }
-        
-        function showAddProductToCategory(category) {
-            showProductCreationForm(category);
-        }
-        
-        function showProductCreationForm(category) {
-            tg.showPopup({
-                title: `➕ Товар в ${category.name}`,
-                message: `Заполните данные товара:\n\n1. Название товара\n2. Описание\n3. Цена ($ или ₽)\n4. Данные для выдачи (логин:пароль)\n\nПример данных для выдачи:\nЛогин: player123\nПароль: pass456\nКлюч: ABC-DEF-123`,
-                buttons: [
-                    { id: 'create', type: 'default', text: '📝 Создать товар' },
-                    { id: 'cancel', type: 'cancel', text: 'Отмена' }
-                ]
-            }).then(result => {
-                if (result === 'create') {
-                    tg.showAlert(`✅ Товар добавлен в "${category.name}"!\n\nТеперь он доступен для покупки.`);
-                    
-                    // В реальности здесь сохранение в базу
-                    const newProduct = {
-                        id: Date.now(),
-                        name: 'Новый товар',
-                        desc: 'Описание товара',
-                        price: '$19.99',
-                        icon: '📦',
-                        gameId: category.id,
-                        data: 'Логин: test\nПароль: test123'
-                    };
-                    
-                    products.push(newProduct);
-                    loadProducts();
-                }
-            });
-        }
-        
-        function editCategory(category) {
-            tg.showPopup({
-                title: `✏️ Редактировать ${category.name}`,
-                message: `Измените данные категории:`,
-                buttons: [
-                    { id: 'name', type: 'default', text: '📝 Изменить название' },
-                    { id: 'icon', type: 'default', text: '🎨 Изменить иконку' },
-                    { id: 'cancel', type: 'cancel', text: 'Отмена' }
-                ]
-            });
-        }
-        
-        function viewCategoryProducts(category) {
-            const categoryProducts = products.filter(p => p.gameId === category.id);
+        function showCategoryProducts(category) {
+            const categoryProducts = products.filter(p => p.categoryId === category.id);
             
             if (categoryProducts.length === 0) {
                 tg.showAlert(`В категории "${category.name}" пока нет товаров.`);
@@ -923,102 +1408,317 @@
             
             let message = `Товары в "${category.name}":\n\n`;
             categoryProducts.forEach((p, i) => {
-                message += `${i+1}. ${p.name} - ${p.price}\n`;
+                message += `${i+1}. ${p.name} - ${p.currency}${p.price}\n`;
             });
             
             tg.showAlert(message);
         }
         
-        function deleteCategory(category) {
-            tg.showPopup({
-                title: '🗑️ Удалить категорию',
-                message: `Вы уверены, что хотите удалить "${category.name}"?\n\nВсе товары в этой категории также будут удалены!`,
-                buttons: [
-                    { id: 'delete', type: 'destructive', text: 'Да, удалить' },
-                    { id: 'cancel', type: 'cancel', text: 'Отмена' }
-                ]
-            }).then(result => {
-                if (result === 'delete') {
-                    tg.showAlert(`Категория "${category.name}" удалена.`);
-                }
+        // ==================== ПОКУПКА ТОВАРОВ ====================
+        function selectProduct(productId) {
+            selectedProduct = products.find(p => p.id === productId);
+            
+            if (!selectedProduct) return;
+            
+            // Добавляем в историю
+            viewHistory.push({
+                id: selectedProduct.id,
+                name: selectedProduct.name,
+                price: selectedProduct.price,
+                currency: selectedProduct.currency,
+                time: new Date().toLocaleTimeString()
+            });
+            
+            // Сохраняем историю
+            localStorage.setItem('universal_shop_history', JSON.stringify(viewHistory));
+            updateHistory();
+            
+            // Показываем модалку оплаты
+            showPaymentModal();
+        }
+        
+        function showPaymentModal() {
+            const paymentInfo = document.getElementById('paymentInfo');
+            paymentInfo.innerHTML = `
+                <div style="background: var(--bg-secondary); padding: 15px; border-radius: 12px; margin-bottom: 20px;">
+                    <h4 style="margin-bottom: 10px;">${selectedProduct.name}</h4>
+                    <p style="margin-bottom: 5px;">${selectedProduct.description}</p>
+                    <div style="font-size: 24px; font-weight: bold; color: var(--accent);">
+                        ${selectedProduct.currency}${selectedProduct.price}
+                    </div>
+                </div>
+            `;
+            
+            openModal('paymentModal');
+        }
+        
+        function selectPayment(method) {
+            closeModal('paymentModal');
+            
+            if (method === 'crypto') {
+                document.getElementById('cryptoAmount').textContent = 
+                    `${selectedProduct.currency}${selectedProduct.price}`;
+                openModal('cryptoModal');
+            } else if (method === 'rub') {
+                // Конвертация в рубли (примерный курс)
+                const rubPrice = selectedProduct.price * 90;
+                document.getElementById('rubAmount').textContent = 
+                    `${Math.round(rubPrice)} ₽`;
+                document.getElementById('orderId').textContent = 
+                    selectedProduct.id.toString().padStart(4, '0');
+                openModal('rubModal');
+            }
+        }
+        
+        function completeCryptoPayment() {
+            closeModal('cryptoModal');
+            deliverProduct('crypto');
+        }
+        
+        function completeRubPayment() {
+            closeModal('rubModal');
+            
+            tg.showAlert(`✅ Заказ создан!\n\nОжидайте проверки оплаты администратором. Как только перевод будет подтвержден, вы получите товар.\n\nНомер заказа: US-${selectedProduct.id.toString().padStart(4, '0')}`);
+            
+            // Отправляем уведомление админу (в реальном приложении)
+            sendOrderToAdmin('rub');
+        }
+        
+        function deliverProduct(paymentMethod) {
+            tg.showAlert(`✅ Оплата подтверждена!\n\n🎁 Ваш товар:\n${selectedProduct.name}\n\n📦 ДАННЫЯ ДЛЯ ПОЛУЧЕНИЯ:\n\n${selectedProduct.deliveryData}\n\n⚠️ Сохраните эти данные!`);
+            
+            // Отправляем данные в бота
+            if (currentUser) {
+                tg.sendData(JSON.stringify({
+                    action: 'product_delivered',
+                    productId: selectedProduct.id,
+                    userId: currentUser.id,
+                    userName: currentUser.first_name,
+                    productName: selectedProduct.name,
+                    paymentMethod: paymentMethod,
+                    deliveryData: selectedProduct.deliveryData,
+                    timestamp: new Date().toISOString()
+                }));
+            }
+            
+            selectedProduct = null;
+        }
+        
+        function sendOrderToAdmin(paymentMethod) {
+            // В реальном приложении здесь запрос к бэкенду
+            console.log('Заказ отправлен админу:', {
+                product: selectedProduct,
+                user: currentUser,
+                paymentMethod: paymentMethod,
+                timestamp: new Date().toISOString()
             });
         }
         
-        function showOrders() {
-            tg.showAlert(`📊 Управление заказами\n\nЗдесь будет список всех заказов:\n\n• Ожидают оплаты: 3\n• В обработке: 2\n• Выполнены: 15\n\nДля управления заказами перейдите в Telegram-группу.`);
+        // ==================== АДМИН-ФУНКЦИИ ====================
+        function showAddGameModal() {
+            openModal('addGameModal');
+        }
+        
+        function addGame() {
+            const name = document.getElementById('gameName').value.trim();
+            const icon = document.getElementById('gameIcon').value.trim();
+            
+            if (!name || !icon) {
+                tg.showAlert('Заполните все поля!');
+                return;
+            }
+            
+            const newGame = {
+                id: Date.now(),
+                name: name,
+                icon: icon,
+                type: 'game'
+            };
+            
+            games.push(newGame);
+            localStorage.setItem('universal_shop_games', JSON.stringify(games));
+            
+            loadGames();
+            closeModal('addGameModal');
+            tg.showAlert(`✅ Игра "${name}" добавлена!`);
+        }
+        
+        function showAddAppModal() {
+            tg.showAlert('Форма добавления приложения (аналогична добавлению игры)');
+        }
+        
+        function showAddProductModal() {
+            // Заполняем список категорий
+            const categorySelect = document.getElementById('productCategory');
+            categorySelect.innerHTML = '<option value="">Выберите игру/приложение</option>';
+            
+            games.forEach(game => {
+                const option = document.createElement('option');
+                option.value = game.id;
+                option.textContent = `🎮 ${game.name}`;
+                categorySelect.appendChild(option);
+            });
+            
+            apps.forEach(app => {
+                const option = document.createElement('option');
+                option.value = app.id;
+                option.textContent = `📱 ${app.name}`;
+                categorySelect.appendChild(option);
+            });
+            
+            openModal('addProductModal');
+        }
+        
+        function showAddProductToCategory(category) {
+            showAddProductModal();
+            document.getElementById('productCategory').value = category.id;
+        }
+        
+        function addProduct() {
+            const categoryId = parseInt(document.getElementById('productCategory').value);
+            const name = document.getElementById('productName').value.trim();
+            const description = document.getElementById('productDescription').value.trim();
+            const price = parseFloat(document.getElementById('productPrice').value);
+            const currency = document.getElementById('productCurrency').value;
+            const icon = document.getElementById('productIcon').value.trim();
+            const image = document.getElementById('productImage').value.trim();
+            const deliveryData = document.getElementById('productData').value.trim();
+            
+            if (!categoryId || !name || !description || !price || !icon || !deliveryData) {
+                tg.showAlert('Заполните все обязательные поля!');
+                return;
+            }
+            
+            const newProduct = {
+                id: Date.now(),
+                name: name,
+                description: description,
+                price: price,
+                currency: currency,
+                icon: icon,
+                categoryId: categoryId,
+                image: image,
+                deliveryData: deliveryData
+            };
+            
+            products.push(newProduct);
+            localStorage.setItem('universal_shop_products', JSON.stringify(products));
+            
+            loadProducts();
+            closeModal('addProductModal');
+            tg.showAlert(`✅ Товар "${name}" добавлен!`);
+        }
+        
+        function editCategory(category) {
+            tg.showAlert(`Редактирование категории "${category.name}" (в разработке)`);
+        }
+        
+        function manageOrders() {
+            tg.showAlert('Управление заказами (перейдите в Telegram-группу для просмотра заказов)');
         }
         
         // ==================== ДОПОЛНИТЕЛЬНЫЕ ФУНКЦИИ ====================
-        function deleteHistory() {
+        function deleteHistoryItem() {
             viewHistory = [];
-            localStorage.removeItem('viewHistory');
+            localStorage.setItem('universal_shop_history', JSON.stringify(viewHistory));
             updateHistory();
             tg.showAlert('История просмотров очищена');
         }
         
         function showAllGames() {
-            tg.showAlert('🎮 Все игры магазина\n\nВ разработке: полный каталог игр');
+            tg.showAlert('Все игры (в разработке)');
         }
         
         function showAllApps() {
-            tg.showAlert('📱 Все приложения\n\nВ разработке: полный каталог услуг Telegram');
+            tg.showAlert('Все приложения (в разработке)');
         }
         
-        function openSupport() {
-            tg.showPopup({
-                title: '💬 Поддержка',
-                message: 'Выберите способ связи:',
-                buttons: [
-                    { id: 'chat', type: 'default', text: '💬 Написать в чат' },
-                    { id: 'faq', type: 'default', text: '❓ Частые вопросы' },
-                    { id: 'close', type: 'cancel', text: 'Закрыть' }
-                ]
-            }).then(result => {
-                if (result === 'chat') {
-                    tg.openTelegramLink('https://t.me/ваша_поддержка');
-                } else if (result === 'faq') {
-                    tg.showAlert('❓ Частые вопросы\n\nQ: Как получить товар после оплаты?\nA: Данные придут автоматически в чат.\n\nQ: Сколько ждать проверки оплаты?\nA: До 15 минут в рабочее время.');
+        function openChat() {
+            openModal('chatModal');
+        }
+        
+        function sendMessage() {
+            const input = document.getElementById('chatInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            const chatMessages = document.getElementById('chatMessages');
+            const newMessage = document.createElement('div');
+            newMessage.className = 'message message-user';
+            newMessage.innerHTML = `<strong>Вы:</strong> ${message}`;
+            chatMessages.appendChild(newMessage);
+            
+            input.value = '';
+            
+            // Авто-ответ (имитация)
+            setTimeout(() => {
+                const response = document.createElement('div');
+                response.className = 'message message-admin';
+                response.innerHTML = `<strong>Поддержка:</strong> Спасибо за сообщение! Ответим в ближайшее время.`;
+                chatMessages.appendChild(response);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }, 1000);
+            
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+        
+        function openBonuses() {
+            openModal('bonusesModal');
+        }
+        
+        function openProfile() {
+            openModal('profileModal');
+        }
+        
+        function showUserOrders() {
+            tg.showAlert('Мои заказы (в разработке)');
+        }
+        
+        // ==================== УТИЛИТЫ ====================
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.remove('hidden');
+        }
+        
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.add('hidden');
+        }
+        
+        function copyText(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                tg.showAlert('Текст скопирован!');
+            });
+        }
+        
+        function setupSearch() {
+            const searchInput = document.getElementById('searchInput');
+            searchInput.addEventListener('input', function(e) {
+                const query = e.target.value.toLowerCase();
+                if (query.length > 1) {
+                    // Фильтрация товаров (в реальном приложении будет на сервере)
+                    console.log('Поиск:', query);
                 }
             });
         }
         
-        function openBonuses() {
-            tg.showAlert('🎁 Раздел бонусов\n\n• Промокод WELCOME10 - 10% скидка\n• Каждые 5 покупок - бесплатный товар\n• Реферальная программа: 5% с каждой покупки друга');
-        }
-        
-        function openProfile() {
-            tg.showPopup({
-                title: `👤 Профиль ${userName}`,
-                message: `ID: ${userId}\n\nСтатистика:\n• Заказов: 0\n• Потрачено: $0\n• Бонусов: 100\n\n${isAdmin ? '👑 Статус: Администратор' : '👤 Статус: Покупатель'}`,
-                buttons: [
-                    { id: 'orders', type: 'default', text: '📦 Мои заказы' },
-                    { id: 'bonuses', type: 'default', text: '🎁 Мои бонусы' },
-                    { id: 'close', type: 'cancel', text: 'Закрыть' }
-                ]
+        // ==================== ОБРАБОТКА СОБЫТИЙ ====================
+        // Закрытие модалок по клику на оверлей
+        document.querySelectorAll('.modal-overlay').forEach(modal => {
+            modal.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.classList.add('hidden');
+                }
             });
-        }
-        
-        // ==================== ПОИСК ====================
-        const searchInput = document.querySelector('.search-input');
-        searchInput.addEventListener('input', function(e) {
-            const query = e.target.value.toLowerCase();
-            if (query.length > 1) {
-                console.log('Поиск товаров:', query);
-            }
         });
         
-        // ==================== ОТПРАВКА ДАННЫХ БОТУ ====================
-        function sendToBot(action, data) {
-            const payload = {
-                action: action,
-                userId: userId,
-                data: data,
-                timestamp: new Date().toISOString()
-            };
-            
-            tg.sendData(JSON.stringify(payload));
-            console.log('Отправлено боту:', payload);
-        }
+        // Горячие клавиши
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                document.querySelectorAll('.modal-overlay').forEach(modal => {
+                    modal.classList.add('hidden');
+                });
+            }
+        });
     </script>
 </body>
 </html>
