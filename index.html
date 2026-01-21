@@ -2,723 +2,93 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>UNIVERSAL SHOP 🛍️</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вирус Игра - Мини-приложение</title>
     <style>
-        /* ========== ОСНОВНЫЕ СТИЛИ ========== */
-        :root {
-            /* Светлая тема */
-            --bg-primary: #ffffff;
-            --bg-secondary: #f8f9fa;
-            --bg-card: #ffffff;
-            --text-primary: #1a1a1a;
-            --text-secondary: #6b7280;
-            --accent: #6366f1;
-            --border: #e5e7eb;
-            --shadow: 0 4px 12px rgba(0,0,0,0.05);
-            --success: #10b981;
-            --danger: #ef4444;
-            --warning: #f59e0b;
-        }
-        
-        .dark-theme {
-            /* Темная тема */
-            --bg-primary: #0f172a;
-            --bg-secondary: #1e293b;
-            --bg-card: #1e293b;
-            --text-primary: #f1f5f9;
-            --text-secondary: #94a3b8;
-            --accent: #818cf8;
-            --border: #334155;
-            --shadow: 0 4px 12px rgba(0,0,0,0.25);
-        }
-        
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
         body {
-            background: var(--bg-primary);
-            color: var(--text-primary);
-            transition: all 0.3s ease;
-            padding-bottom: 80px;
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 100%);
+            color: #fff;
             min-height: 100vh;
+            padding: 20px;
         }
         
         .container {
-            max-width: 100%;
-            padding: 0 16px;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
         }
         
-        /* ========== ШАПКА ========== */
         .header {
-            position: sticky;
-            top: 0;
-            background: var(--bg-primary);
-            border-bottom: 1px solid var(--border);
-            padding: 16px;
-            z-index: 100;
             display: flex;
-            align-items: center;
             justify-content: space-between;
-        }
-        
-        .logo {
-            display: flex;
             align-items: center;
-            gap: 12px;
-            font-weight: 700;
-            font-size: 20px;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #00ff88;
         }
         
-        .logo-icon {
-            width: 32px;
-            height: 32px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            border-radius: 10px;
+        .stats-bar {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 18px;
+            gap: 20px;
+            background: rgba(0, 255, 136, 0.1);
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border: 1px solid #00ff88;
         }
         
-        .admin-badge {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: white;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 11px;
-            font-weight: 600;
-            margin-left: 8px;
-        }
-        
-        .header-controls {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .search-container {
-            position: relative;
-        }
-        
-        .search-input {
-            width: 140px;
-            padding: 10px 15px 10px 40px;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            color: var(--text-primary);
-            font-size: 14px;
-            outline: none;
-            transition: width 0.3s;
-        }
-        
-        .search-input:focus {
-            width: 180px;
-        }
-        
-        .search-icon {
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--text-secondary);
-            font-size: 14px;
-        }
-        
-        .theme-toggle {
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: var(--bg-secondary);
-            border: 1px solid var(--border);
-            color: var(--text-primary);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 16px;
-            transition: all 0.2s;
-        }
-        
-        .theme-toggle:hover {
-            transform: rotate(15deg);
-        }
-        
-        /* ========== АДМИН ПАНЕЛЬ ========== */
-        .admin-panel {
-            background: linear-gradient(135deg, #1e293b, #0f172a);
-            padding: 16px;
-            margin: 16px;
-            border-radius: 16px;
-            border: 2px solid #f59e0b;
-        }
-        
-        .admin-title {
-            color: #f59e0b;
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .admin-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-        }
-        
-        .admin-btn {
-            padding: 12px;
-            border-radius: 12px;
-            border: none;
-            font-weight: 500;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: transform 0.2s;
-        }
-        
-        .admin-btn:hover {
-            transform: translateY(-2px);
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #10b981, #059669);
-            color: white;
-        }
-        
-        .btn-secondary {
-            background: linear-gradient(135deg, #6366f1, #4f46e5);
-            color: white;
-        }
-        
-        .btn-warning {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: white;
-        }
-        
-        /* ========== ПОЛКИ С ИГРАМИ ========== */
-        .section {
-            margin: 32px 0 24px 0;
-        }
-        
-        .section-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 16px;
-            padding: 0 16px;
-        }
-        
-        .section-title {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 18px;
-            font-weight: 600;
-        }
-        
-        .section-icon {
-            font-size: 22px;
-        }
-        
-        .add-btn {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: var(--accent);
-            color: white;
-            border: none;
-            font-size: 20px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .shelf {
-            display: flex;
-            gap: 16px;
-            padding: 0 16px;
-            overflow-x: auto;
-            scrollbar-width: none;
-            -ms-overflow-style: none;
-        }
-        
-        .shelf::-webkit-scrollbar {
-            display: none;
-        }
-        
-        .game-card {
-            min-width: 100px;
+        .stat-item {
             text-align: center;
-            background: var(--bg-card);
-            border-radius: 16px;
-            padding: 20px 16px;
-            cursor: pointer;
-            border: 2px solid var(--border);
-            transition: all 0.3s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
+            flex: 1;
         }
         
-        .game-card:hover {
-            transform: translateY(-4px);
-            border-color: var(--accent);
-            box-shadow: var(--shadow);
-        }
-        
-        .game-icon {
-            font-size: 36px;
-            width: 60px;
-            height: 60px;
-            background: linear-gradient(135deg, var(--accent), #8b5cf6);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-        }
-        
-        .game-name {
-            font-size: 14px;
-            font-weight: 600;
-        }
-        
-        .view-all-btn {
-            display: block;
-            margin: 20px auto 0;
-            padding: 12px 24px;
-            background: var(--accent);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-weight: 500;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            justify-content: center;
-        }
-        
-        /* ========== ИСТОРИЯ ПРОСМОТРОВ ========== */
-        .history-card {
-            background: var(--bg-card);
-            border-radius: 16px;
-            padding: 20px;
-            margin: 16px;
-            border: 2px solid var(--border);
-        }
-        
-        .history-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 12px;
-        }
-        
-        .history-title {
-            font-weight: 600;
-            font-size: 16px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        
-        .delete-btn {
-            background: var(--danger);
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 8px;
-            font-size: 12px;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 4px;
-        }
-        
-        .history-item {
-            background: var(--bg-secondary);
-            padding: 12px;
-            border-radius: 12px;
-            margin-top: 8px;
-        }
-        
-        /* ========== ЛЕНТА ТОВАРОВ ========== */
-        .products-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 16px;
-            padding: 0 16px;
-            margin-top: 20px;
-        }
-        
-        .product-card {
-            background: var(--bg-card);
-            border-radius: 16px;
-            overflow: hidden;
-            border: 2px solid var(--border);
-            transition: all 0.3s;
-            cursor: pointer;
-        }
-        
-        .product-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow);
-        }
-        
-        .product-image {
-            width: 100%;
-            height: 120px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 36px;
-        }
-        
-        .product-info {
-            padding: 16px;
-        }
-        
-        .product-name {
-            font-weight: 600;
-            margin-bottom: 6px;
-            font-size: 15px;
-            line-height: 1.3;
-        }
-        
-        .product-description {
-            font-size: 13px;
-            color: var(--text-secondary);
-            margin-bottom: 12px;
-            line-height: 1.4;
-        }
-        
-        .product-footer {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .product-price {
-            color: var(--accent);
-            font-weight: 700;
-            font-size: 18px;
-        }
-        
-        .buy-btn {
-            background: var(--success);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 10px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .buy-btn:hover {
-            background: #059669;
-            transform: scale(1.05);
-        }
-        
-        /* ========== ФОРМЫ ========== */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.7);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 1000;
-            padding: 20px;
-        }
-        
-        .modal {
-            background: var(--bg-primary);
-            border-radius: 20px;
-            max-width: 500px;
-            width: 100%;
-            max-height: 90vh;
-            overflow-y: auto;
-            animation: modalSlide 0.3s ease;
-        }
-        
-        @keyframes modalSlide {
-            from {
-                opacity: 0;
-                transform: translateY(20px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .modal-header {
-            padding: 20px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .modal-title {
-            font-size: 20px;
-            font-weight: 600;
-        }
-        
-        .close-btn {
-            background: none;
-            border: none;
+        .stat-value {
             font-size: 24px;
-            color: var(--text-secondary);
-            cursor: pointer;
+            font-weight: bold;
+            color: #00ff88;
+            text-shadow: 0 0 10px #00ff88;
         }
         
-        .modal-body {
-            padding: 20px;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 500;
-            color: var(--text-primary);
-        }
-        
-        .form-input, .form-textarea, .form-select {
-            width: 100%;
-            padding: 12px 16px;
-            background: var(--bg-secondary);
-            border: 2px solid var(--border);
-            border-radius: 12px;
-            color: var(--text-primary);
-            font-size: 15px;
-            outline: none;
-            transition: border-color 0.2s;
-        }
-        
-        .form-input:focus, .form-textarea:focus, .form-select:focus {
-            border-color: var(--accent);
-        }
-        
-        .form-textarea {
-            min-height: 100px;
-            resize: vertical;
-        }
-        
-        .file-upload {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 20px;
-            border: 2px dashed var(--border);
-            border-radius: 12px;
-            cursor: pointer;
-            text-align: center;
-            justify-content: center;
-        }
-        
-        .file-upload:hover {
-            border-color: var(--accent);
-        }
-        
-        .submit-btn {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, var(--accent), #4f46e5);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-        }
-        
-        .submit-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
-        }
-        
-        /* ========== КНОПКИ ДЕЙСТВИЙ ========== */
-        .action-buttons {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            right: 0;
-            background: var(--bg-primary);
-            border-top: 1px solid var(--border);
-            padding: 12px 16px;
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 12px;
-            z-index: 99;
-        }
-        
-        .action-btn {
-            padding: 14px;
-            border-radius: 12px;
-            border: none;
-            font-weight: 500;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 6px;
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            transition: all 0.2s;
-        }
-        
-        .action-btn:hover {
-            background: var(--accent);
-            color: white;
-            transform: translateY(-2px);
-        }
-        
-        .action-icon {
-            font-size: 20px;
-        }
-        
-        .action-text {
+        .stat-label {
             font-size: 12px;
+            color: #aaa;
+            margin-top: 5px;
         }
         
-        /* ========== ЧАТ И БОНУСЫ ========== */
-        .chat-container, .bonuses-container {
-            padding: 20px;
-        }
-        
-        .chat-messages {
-            max-height: 400px;
-            overflow-y: auto;
-            margin-bottom: 20px;
-        }
-        
-        .message {
-            margin-bottom: 16px;
-            padding: 12px 16px;
-            border-radius: 16px;
-            max-width: 80%;
-        }
-        
-        .message-user {
-            background: var(--accent);
-            color: white;
-            margin-left: auto;
-        }
-        
-        .message-admin {
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-        }
-        
-        .chat-input {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .bonus-card {
-            background: linear-gradient(135deg, #f59e0b, #d97706);
-            color: white;
-            padding: 20px;
-            border-radius: 16px;
-            margin-bottom: 16px;
-        }
-        
-        .bonus-code {
-            font-family: monospace;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 8px 12px;
-            border-radius: 8px;
-            margin-top: 12px;
-            display: inline-block;
-        }
-        
-        /* ========== УТИЛИТЫ ========== */
-        .hidden {
-            display: none !important;
-        }
-        
-        .text-center {
+        .virus-container {
             text-align: center;
+            margin: 30px 0;
+            padding: 40px;
+            background: rgba(255, 0, 100, 0.1);
+            border-radius: 25px;
+            border: 2px solid #ff0064;
+            cursor: pointer;
+            transition: transform 0.1s;
         }
         
-        .text-muted {
-            color: var(--text-secondary);
+        .virus-container:active {
+            transform: scale(0.95);
         }
         
-        .mt-4 { margin-top: 16px; }
-        .mb-4 { margin-bottom: 16px; }
-        .p-4 { padding: 16px; }
-        
-        /* ========== АДАПТИВ ========== */
-        @media (max-width: 480px) {
-            .header-controls {
-                gap: 8px;
-            }
-            
-            .search-input {
-                width: 120px;
-            }
-            
-            .search-input:focus {
-                width: 150px;
-            }
-            
-            .products-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-            
-            .admin-buttons {
-                grid-template-columns: 1fr;
-            }
-        }
-        
-        /* ========== АНИМАЦИИ ========== */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-        
-        .fade-in {
-            animation: fadeIn 0.3s ease-out;
-        }
-        
-        .pulse {
+        .virus-img {
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, #ff0064 0%, #99003d 100%);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
             animation: pulse 2s infinite;
+            box-shadow: 0 0 50px #ff0064;
         }
         
         @keyframes pulse {
@@ -726,999 +96,1004 @@
             50% { transform: scale(1.05); }
             100% { transform: scale(1); }
         }
+        
+        .click-text {
+            font-size: 18px;
+            color: #ff0064;
+            margin-top: 10px;
+        }
+        
+        .buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 20px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border: 1px solid #00a2ff;
+            border-radius: 15px;
+            color: #00a2ff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            background: rgba(0, 162, 255, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0, 162, 255, 0.3);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #00ff88 0%, #00cc6a 100%);
+            border: none;
+            color: #000;
+            font-weight: bold;
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #ff0064 0%, #cc0050 100%);
+            border: none;
+            color: white;
+        }
+        
+        .shop {
+            margin-top: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 25px;
+            border-radius: 20px;
+        }
+        
+        .shop-title {
+            color: #00ff88;
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+        
+        .upgrade-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid #00ff88;
+        }
+        
+        .upgrade-info h4 {
+            color: #00a2ff;
+            margin-bottom: 5px;
+        }
+        
+        .upgrade-price {
+            color: #00ff88;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .buy-btn {
+            background: #00ff88;
+            color: #000;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .donate-section {
+            margin-top: 40px;
+            background: rgba(255, 215, 0, 0.1);
+            padding: 25px;
+            border-radius: 20px;
+            border: 1px solid gold;
+        }
+        
+        .donate-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .star {
+            color: gold;
+        }
+        
+        .ton {
+            color: #0088cc;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #00ff88;
+            color: #000;
+            padding: 15px 25px;
+            border-radius: 10px;
+            display: none;
+            z-index: 1000;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 50px;
+            color: #00ff88;
+        }
     </style>
 </head>
 <body>
-    <!-- Шапка -->
-    <div class="header">
-        <div class="logo">
-            <div class="logo-icon">🛍️</div>
-            <span>UNIVERSAL SHOP</span>
-            <div id="adminBadge" class="admin-badge">👑 АДМИН</div>
-        </div>
-        <div class="header-controls">
-            <div class="search-container">
-                <i class="fas fa-search search-icon"></i>
-                <input type="text" class="search-input" placeholder="Поиск..." id="searchInput">
-            </div>
-            <button class="theme-toggle" id="themeToggle">
-                <i class="fas fa-moon"></i>
-            </button>
-        </div>
-    </div>
+    <div class="notification" id="notification"></div>
     
-    <!-- Админ панель (только для админа) -->
-    <div id="adminPanel" class="admin-panel hidden">
-        <div class="admin-title">
-            <i class="fas fa-crown"></i>
-            Панель администратора
-        </div>
-        <div class="admin-buttons">
-            <button class="admin-btn btn-primary" onclick="showAddGameModal()">
-                <i class="fas fa-plus"></i> Игру
-            </button>
-            <button class="admin-btn btn-secondary" onclick="showAddProductModal()">
-                <i class="fas fa-cube"></i> Товар
-            </button>
-            <button class="admin-btn btn-warning" onclick="showAddAppModal()">
-                <i class="fas fa-mobile-alt"></i> Приложение
-            </button>
-            <button class="admin-btn" style="background: #8b5cf6; color: white;" onclick="manageOrders()">
-                <i class="fas fa-shopping-cart"></i> Заказы
-            </button>
-        </div>
-    </div>
-    
-    <!-- Основной контент -->
     <div class="container">
-        <!-- Блок "Игры" -->
-        <div class="section">
-            <div class="section-header">
-                <div class="section-title">
-                    <div class="section-icon">🎮</div>
-                    <span>Игры</span>
-                </div>
-                <button id="addGameBtn" class="add-btn hidden" onclick="showAddGameModal()">
-                    <i class="fas fa-plus"></i>
-                </button>
-            </div>
-            <div class="shelf" id="gamesShelf">
-                <!-- Игры загружаются через JS -->
-            </div>
-            <button class="view-all-btn" onclick="showAllGames()">
-                <i class="fas fa-eye"></i> Смотреть все
-            </button>
-        </div>
-        
-        <!-- Блок "Приложения" -->
-        <div class="section">
-            <div class="section-header">
-                <div class="section-title">
-                    <div class="section-icon">📱</div>
-                    <span>Приложения Telegram</span>
-                </div>
-                <button id="addAppBtn" class="add-btn hidden" onclick="showAddAppModal()">
-                    <i class="fas fa-plus"></i>
-                </button>
-            </div>
-            <div class="shelf" id="appsShelf">
-                <!-- Приложения загружаются через JS -->
-            </div>
-            <button class="view-all-btn" onclick="showAllApps()">
-                <i class="fas fa-eye"></i> Смотреть все
-            </button>
-        </div>
-        
-        <!-- Блок "Смотрел в последний раз" -->
-        <div class="section">
-            <div class="section-header">
-                <div class="section-title">
-                    <div class="section-icon">🕒</div>
-                    <span>Смотрел в последний раз</span>
-                </div>
-            </div>
-            <div class="history-card" id="historyCard">
-                <!-- История загружается через JS -->
+        <div class="header">
+            <h1>🦠 ВИРУС ИГРА</h1>
+            <div id="user-balance">
+                <span class="star">★ 0</span> | 
+                <span class="ton">💎 0</span>
             </div>
         </div>
         
-        <!-- Общая лента товаров -->
-        <div class="section">
-            <div class="section-header">
-                <div class="section-title">
-                    <div class="section-icon">🔥</div>
-                    <span>Все товары</span>
-                </div>
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-value" id="cells-count">0</div>
+                <div class="stat-label">Зараженных клеток</div>
             </div>
-            <div class="products-grid" id="productsGrid">
-                <!-- Товары загружаются через JS -->
+            <div class="stat-item">
+                <div class="stat-value" id="virus-level">1</div>
+                <div class="stat-label">Уровень вируса</div>
             </div>
-        </div>
-    </div>
-    
-    <!-- Кнопки действий -->
-    <div class="action-buttons">
-        <button class="action-btn" onclick="openChat()">
-            <i class="fas fa-comment action-icon"></i>
-            <span class="action-text">Поддержка</span>
-        </button>
-        <button class="action-btn" onclick="openBonuses()">
-            <i class="fas fa-gift action-icon"></i>
-            <span class="action-text">Бонусы</span>
-        </button>
-        <button class="action-btn" onclick="openProfile()">
-            <i class="fas fa-user action-icon"></i>
-            <span class="action-text">Профиль</span>
-        </button>
-    </div>
-    
-    <!-- Модальные окна -->
-    <div id="addGameModal" class="modal-overlay hidden">
-        <div class="modal">
-            <div class="modal-header">
-                <div class="modal-title">➕ Добавить игру</div>
-                <button class="close-btn" onclick="closeModal('addGameModal')">×</button>
+            <div class="stat-item">
+                <div class="stat-value" id="coins-count">0</div>
+                <div class="stat-label">Монет</div>
             </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label class="form-label">Название игры</label>
-                    <input type="text" class="form-input" id="gameName" placeholder="Например: Fortnite">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Иконка (эмодзи)</label>
-                    <input type="text" class="form-input" id="gameIcon" placeholder="🎮" maxlength="2">
-                </div>
-                <button class="submit-btn" onclick="addGame()">
-                    <i class="fas fa-save"></i> Создать игру
-                </button>
+            <div class="stat-item">
+                <div class="stat-value" id="auto-income">0/сек</div>
+                <div class="stat-label">Автозаработок</div>
             </div>
         </div>
-    </div>
-    
-    <!-- Модалка добавления товара -->
-    <div id="addProductModal" class="modal-overlay hidden">
-        <div class="modal">
-            <div class="modal-header">
-                <div class="modal-title">📦 Добавить товар</div>
-                <button class="close-btn" onclick="closeModal('addProductModal')">×</button>
+        
+        <div class="virus-container" id="click-area">
+            <div class="virus-img">
+                🦠
             </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label class="form-label">Категория</label>
-                    <select class="form-select" id="productCategory">
-                        <option value="">Выберите игру/приложение</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Название товара</label>
-                    <input type="text" class="form-input" id="productName" placeholder="Например: 1000 V-bucks">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Описание</label>
-                    <textarea class="form-textarea" id="productDescription" placeholder="Описание товара..."></textarea>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Цена</label>
-                    <div style="display: flex; gap: 10px;">
-                        <input type="number" class="form-input" id="productPrice" placeholder="99.99" style="flex: 1;">
-                        <select class="form-select" id="productCurrency" style="width: 100px;">
-                            <option value="$">USD ($)</option>
-                            <option value="₽">RUB (₽)</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Иконка (эмодзи)</label>
-                    <input type="text" class="form-input" id="productIcon" placeholder="💰" maxlength="2">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Фото товара (URL)</label>
-                    <input type="text" class="form-input" id="productImage" placeholder="https://example.com/image.jpg">
-                </div>
-                <div class="form-group">
-                    <label class="form-label">Данные для выдачи*</label>
-                    <textarea class="form-textarea" id="productData" placeholder="Логин: player123&#10;Пароль: pass456&#10;&#10;Или ключ активации: ABC-DEF-123" rows="4"></textarea>
-                    <small class="text-muted">Эти данные получит покупатель после оплаты</small>
-                </div>
-                <button class="submit-btn" onclick="addProduct()">
-                    <i class="fas fa-save"></i> Создать товар
-                </button>
-            </div>
+            <div class="click-text">КЛИКАЙ ДЛЯ ЗАРАЖЕНИЯ!</div>
         </div>
-    </div>
-    
-    <!-- Модалка оплаты -->
-    <div id="paymentModal" class="modal-overlay hidden">
-        <div class="modal">
-            <div class="modal-header">
-                <div class="modal-title">💳 Оплата товара</div>
-                <button class="close-btn" onclick="closeModal('paymentModal')">×</button>
-            </div>
-            <div class="modal-body">
-                <div id="paymentInfo"></div>
-                <div class="form-group">
-                    <label class="form-label">Выберите способ оплаты:</label>
-                    <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 15px;">
-                        <button class="admin-btn btn-primary" onclick="selectPayment('crypto')">
-                            <i class="fas fa-coins"></i> Криптовалюта (USDT/TON)
-                        </button>
-                        <button class="admin-btn btn-secondary" onclick="selectPayment('rub')">
-                            <i class="fas fa-ruble-sign"></i> Рубли по реквизитам
-                        </button>
-                    </div>
-                </div>
-            </div>
+        
+        <div class="buttons-grid">
+            <button class="btn btn-primary" onclick="openUpgrades()">⚡ УЛУЧШЕНИЯ</button>
+            <button class="btn" onclick="openLeaderboard()">🏆 ТОП ИГРОКОВ</button>
+            <button class="btn" onclick="openDailyBonus()">🎁 ЕЖЕДНЕВНЫЙ БОНУС</button>
+            <button class="btn" onclick="openDonate()">💰 ДОНАТ</button>
         </div>
-    </div>
-    
-    <!-- Модалка крипто-оплаты -->
-    <div id="cryptoModal" class="modal-overlay hidden">
-        <div class="modal">
-            <div class="modal-header">
-                <div class="modal-title">💎 Оплата криптовалютой</div>
-                <button class="close-btn" onclick="closeModal('cryptoModal')">×</button>
+        
+        <div class="shop" id="shop-section" style="display: none;">
+            <h3 class="shop-title">⚡ УЛУЧШЕНИЯ</h3>
+            <div id="upgrades-list">
+                <!-- Динамически заполнятся -->
             </div>
-            <div class="modal-body">
-                <div class="text-center mb-4">
-                    <div style="font-size: 48px;">💰</div>
-                    <h3 style="margin: 10px 0;">Оплата USDT/TON</h3>
-                    <p>После оплаты товар будет выдан автоматически</p>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Сумма к оплате:</label>
-                    <div style="font-size: 32px; font-weight: bold; color: var(--accent); text-align: center;" id="cryptoAmount">
-                        $0.00
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Адрес для оплаты:</label>
-                    <div style="background: var(--bg-secondary); padding: 15px; border-radius: 12px; font-family: monospace; word-break: break-all; margin-top: 10px;">
-                        TQwPk1e4j9w7K...Truncated...Z8m2
-                    </div>
-                    <button class="admin-btn btn-secondary mt-4" onclick="copyText('TQwPk1e4j9w7K...Truncated...Z8m2')">
-                        <i class="fas fa-copy"></i> Скопировать адрес
-                    </button>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Сеть:</label>
-                    <select class="form-select">
-                        <option>TON (The Open Network)</option>
-                        <option>TRC-20 (Tron)</option>
-                        <option>ERC-20 (Ethereum)</option>
-                    </select>
-                </div>
-                
-                <button class="submit-btn pulse" onclick="completeCryptoPayment()">
-                    <i class="fas fa-check"></i> Я оплатил
-                </button>
-            </div>
+            <button class="btn" onclick="closeShop()" style="margin-top: 20px;">← НАЗАД</button>
         </div>
-    </div>
-    
-    <!-- Модалка рублевой оплаты -->
-    <div id="rubModal" class="modal-overlay hidden">
-        <div class="modal">
-            <div class="modal-header">
-                <div class="modal-title">₽ Оплата по реквизитам</div>
-                <button class="close-btn" onclick="closeModal('rubModal')">×</button>
+        
+        <div class="donate-section" id="donate-section" style="display: none;">
+            <h3 class="shop-title">💰 ДОНАТ СИСТЕМА</h3>
+            <p>Звезды идут на баланс игры, TON идут на счет разработчика</p>
+            
+            <div class="donate-buttons">
+                <button class="btn btn-primary" onclick="buyStars(100)">★ 100 звезд - $1</button>
+                <button class="btn btn-primary" onclick="buyStars(500)">★ 500 звезд - $5</button>
+                <button class="btn btn-primary" onclick="buyStars(1000)">★ 1000 звезд - $10</button>
             </div>
-            <div class="modal-body">
-                <div class="text-center mb-4">
-                    <div style="font-size: 48px;">🏦</div>
-                    <h3 style="margin: 10px 0;">Реквизиты для перевода</h3>
-                    <p>После оплаты администратор проверит перевод и выдаст товар</p>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Сумма к оплате:</label>
-                    <div style="font-size: 32px; font-weight: bold; color: var(--accent); text-align: center;" id="rubAmount">
-                        0 ₽
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Банковские реквизиты:</label>
-                    <div style="background: var(--bg-secondary); padding: 15px; border-radius: 12px; margin-top: 10px;">
-                        <div style="margin-bottom: 8px;">
-                            <strong>СБЕРБАНК:</strong><br>
-                            Карта: 2202 2001 2345 6789<br>
-                            Получатель: ИВАН И.И.
-                        </div>
-                        <div style="margin-bottom: 8px;">
-                            <strong>ТИНЬКОФФ:</strong><br>
-                            Карта: 5536 9137 1234 5678<br>
-                            Получатель: ИВАН И.И.
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="form-group">
-                    <label class="form-label">Комментарий к переводу:</label>
-                    <div style="background: var(--bg-secondary); padding: 15px; border-radius: 12px; font-family: monospace; word-break: break-all; margin-top: 10px;">
-                        US-<span id="orderId">0001</span>
-                    </div>
-                    <small class="text-muted">Укажите этот комментарий при переводе</small>
-                </div>
-                
-                <button class="submit-btn" onclick="completeRubPayment()">
-                    <i class="fas fa-check"></i> Я перевел(а) деньги
-                </button>
-                
-                <button class="admin-btn btn-secondary mt-4" onclick="openSupport()">
-                    <i class="fas fa-headset"></i> Связаться с поддержкой
-                </button>
+            
+            <div class="donate-buttons">
+                <button class="btn btn-danger" onclick="buyTon(10)">💎 10 TON - $10</button>
+                <button class="btn btn-danger" onclick="buyTon(50)">💎 50 TON - $50</button>
+                <button class="btn btn-danger" onclick="buyTon(100)">💎 100 TON - $100</button>
             </div>
+            
+            <p style="margin-top: 20px; color: #aaa;">
+                TON переводы отправляются на: <br>
+                <code id="ton-wallet">UQAH4r05Ardq6U_bdIq4gYr0Jw6J8Q5KX7Yt9z8pLmNjKjH</code>
+            </p>
+            
+            <button class="btn" onclick="closeDonate()" style="margin-top: 20px;">← НАЗАД</button>
         </div>
-    </div>
-    
-    <!-- Модалка чата -->
-    <div id="chatModal" class="modal-overlay hidden">
-        <div class="modal">
-            <div class="modal-header">
-                <div class="modal-title">💬 Поддержка</div>
-                <button class="close-btn" onclick="closeModal('chatModal')">×</button>
-            </div>
-            <div class="modal-body">
-                <div class="chat-container">
-                    <div class="chat-messages" id="chatMessages">
-                        <div class="message message-admin">
-                            <strong>Поддержка:</strong> Здравствуйте! Чем могу помочь?
-                        </div>
-                    </div>
-                    <div class="chat-input">
-                        <input type="text" class="form-input" id="chatInput" placeholder="Введите сообщение...">
-                        <button class="admin-btn btn-primary" onclick="sendMessage()">
-                            <i class="fas fa-paper-plane"></i>
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Модалка бонусов -->
-    <div id="bonusesModal" class="modal-overlay hidden">
-        <div class="modal">
-            <div class="modal-header">
-                <div class="modal-title">🎁 Бонусы и акции</div>
-                <button class="close-btn" onclick="closeModal('bonusesModal')">×</button>
-            </div>
-            <div class="modal-body">
-                <div class="bonuses-container">
-                    <div class="bonus-card">
-                        <h3>🎉 Приветственный бонус</h3>
-                        <p>10% скидка на первую покупку</p>
-                        <div class="bonus-code">WELCOME10</div>
-                    </div>
-                    
-                    <div class="bonus-card" style="background: linear-gradient(135deg, #6366f1, #4f46e5);">
-                        <h3>👥 Реферальная программа</h3>
-                        <p>Приводите друзей и получайте 5% с каждой их покупки</p>
-                    </div>
-                    
-                    <div class="bonus-card" style="background: linear-gradient(135deg, #10b981, #059669);">
-                        <h3>🏆 Программа лояльности</h3>
-                        <p>Каждые 5 покупок = 1 бесплатный товар на выбор</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <!-- Модалка профиля -->
-    <div id="profileModal" class="modal-overlay hidden">
-        <div class="modal">
-            <div class="modal-header">
-                <div class="modal-title">👤 Профиль</div>
-                <button class="close-btn" onclick="closeModal('profileModal')">×</button>
-            </div>
-            <div class="modal-body">
-                <div class="text-center mb-4">
-                    <div style="font-size: 64px; width: 80px; height: 80px; background: linear-gradient(135deg, var(--accent), #8b5cf6); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; margin: 0 auto 15px;">
-                        👤
-                    </div>
-                    <h3 id="userName">Пользователь</h3>
-                    <p class="text-muted" id="userId">ID: ...</p>
-                </div>
-                
-                <div style="background: var(--bg-secondary); padding: 20px; border-radius: 16px; margin-bottom: 20px;">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                        <span>Всего покупок:</span>
-                        <strong>0</strong>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
-                        <span>Потрачено:</span>
-                        <strong>$0.00</strong>
-                    </div>
-                    <div style="display: flex; justify-content: space-between;">
-                        <span>Бонусные баллы:</span>
-                        <strong style="color: #f59e0b;">100</strong>
-                    </div>
-                </div>
-                
-                <button class="admin-btn btn-secondary" onclick="showUserOrders()">
-                    <i class="fas fa-shopping-cart"></i> Мои заказы
-                </button>
-            </div>
+        
+        <div class="loading" id="loading">
+            Загрузка...
         </div>
     </div>
 
-    <!-- Основной скрипт -->
     <script>
-        // ==================== КОНСТАНТЫ И ПЕРЕМЕННЫЕ ====================
-        const tg = window.Telegram.WebApp;
-        const ADMIN_IDS = [8381902355]; // Ваш ID админа
-        
-        let currentUser = null;
-        let isAdmin = false;
-        let selectedProduct = null;
-        
-        // Данные магазина (в реальном приложении будут с сервера)
-        let games = JSON.parse(localStorage.getItem('universal_shop_games')) || [
-            { id: 1, name: 'Fortnite', icon: '🎮', type: 'game' },
-            { id: 2, name: 'Minecraft', icon: '⚔️', type: 'game' },
-            { id: 3, name: 'GTA V', icon: '🚗', type: 'game' },
-            { id: 4, name: 'CS:GO', icon: '🔫', type: 'game' }
-        ];
-        
-        let apps = JSON.parse(localStorage.getItem('universal_shop_apps')) || [
-            { id: 5, name: 'Продвижение', icon: '📈', type: 'app' },
-            { id: 6, name: 'Дизайн', icon: '🎨', type: 'app' },
-            { id: 7, name: 'NFT-подарки', icon: '🎁', type: 'app' }
-        ];
-        
-        let products = JSON.parse(localStorage.getItem('universal_shop_products')) || [
-            { 
-                id: 101, 
-                name: 'Аккаунт Fortnite Pro', 
-                description: 'Редкие скины + 5000 V-bucks', 
-                price: 24.99, 
-                currency: '$',
-                icon: '👤',
-                categoryId: 1,
-                image: '',
-                deliveryData: 'Логин: fortnite_pro_123\nПароль: QwErTy2024\n\nВажно: смените пароль после входа!'
-            },
-            { 
-                id: 102, 
-                name: '1000 В-баксов', 
-                description: 'Игровая валюта Fortnite', 
-                price: 9.99, 
-                currency: '$',
-                icon: '💰',
-                categoryId: 1,
-                image: '',
-                deliveryData: 'Код: FN-7X9P-2K4L-8M3Q\n\nАктивация: Настройки → Счет → Ввести код'
+        // Игровые данные
+        let gameData = {
+            cells: 0,
+            coins: 0,
+            stars: 0,
+            ton: 0,
+            virusLevel: 1,
+            clickPower: 1,
+            autoIncome: 0,
+            upgrades: {
+                clickPower: 1,
+                autoClicker: 0,
+                virusSpread: 1,
+                cellResistance: 1
             }
-        ];
-        
-        let viewHistory = JSON.parse(localStorage.getItem('universal_shop_history')) || [];
-        
-        // ==================== ИНИЦИАЛИЗАЦИЯ ====================
-        document.addEventListener('DOMContentLoaded', function() {
-            initApp();
-        });
-        
-        function initApp() {
-            // Настройка Telegram WebApp
-            tg.expand();
-            tg.enableClosingConfirmation();
+        };
+
+        // Цены улучшений
+        const upgradePrices = {
+            clickPower: 10,
+            autoClicker: 50,
+            virusSpread: 100,
+            cellResistance: 150,
+            starMultiplier: 200
+        };
+
+        // Функции уведомлений
+        function showNotification(text, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = text;
+            notification.style.display = 'block';
+            notification.style.background = type === 'success' ? '#00ff88' : '#ff0064';
             
-            // Получаем данные пользователя
-            const user = tg.initDataUnsafe.user;
-            currentUser = user;
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        // Клик по вирусу
+        document.getElementById('click-area').addEventListener('click', function() {
+            const cellsEarned = gameData.clickPower * gameData.virusLevel;
+            gameData.cells += cellsEarned;
+            gameData.coins += Math.floor(cellsEarned * 0.1);
             
-            if (user) {
-                document.getElementById('userName').textContent = user.first_name || 'Пользователь';
-                document.getElementById('userId').textContent = `ID: ${user.id}`;
+            updateDisplay();
+            
+            // Создаем летающий текст
+            const flyingText = document.createElement('div');
+            flyingText.textContent = `+${cellsEarned} клеток`;
+            flyingText.style.position = 'absolute';
+            flyingText.style.color = '#00ff88';
+            flyingText.style.fontWeight = 'bold';
+            flyingText.style.pointerEvents = 'none';
+            flyingText.style.left = (event.clientX + 20) + 'px';
+            flyingText.style.top = (event.clientY - 20) + 'px';
+            document.body.appendChild(flyingText);
+            
+            // Анимация
+            let posY = event.clientY - 20;
+            const animation = setInterval(() => {
+                posY -= 2;
+                flyingText.style.top = posY + 'px';
+                flyingText.style.opacity = (parseFloat(flyingText.style.opacity) || 1) - 0.02;
                 
-                // Проверка на админа
-                isAdmin = ADMIN_IDS.includes(Number(user.id));
-                if (isAdmin) {
-                    document.getElementById('adminPanel').classList.remove('hidden');
-                    document.getElementById('addGameBtn').classList.remove('hidden');
-                    document.getElementById('addAppBtn').classList.remove('hidden');
-                    tg.showAlert(`👑 Добро пожаловать, администратор ${user.first_name}!`);
+                if (posY < event.clientY - 100) {
+                    clearInterval(animation);
+                    document.body.removeChild(flyingText);
                 }
+            }, 20);
+        });
+
+        // Обновление отображения
+        function updateDisplay() {
+            document.getElementById('cells-count').textContent = gameData.cells;
+            document.getElementById('virus-level').textContent = gameData.virusLevel;
+            document.getElementById('coins-count').textContent = gameData.coins;
+            document.getElementById('auto-income').textContent = `${gameData.autoIncome}/сек`;
+            
+            const balanceElement = document.getElementById('user-balance');
+            balanceElement.innerHTML = `<span class="star">★ ${gameData.stars}</span> | <span class="ton">💎 ${gameData.ton}</span>`;
+        }
+
+        // Автозаработок
+        setInterval(() => {
+            if (gameData.autoIncome > 0) {
+                const earned = Math.floor(gameData.autoIncome / 10);
+                gameData.cells += earned;
+                gameData.coins += Math.floor(earned * 0.05);
+                updateDisplay();
+            }
+        }, 1000);
+
+        // Покупка улучшений
+        function buyUpgrade(type) {
+            const price = upgradePrices[type] * (gameData.upgrades[type] + 1);
+            
+            if (gameData.coins >= price) {
+                gameData.coins -= price;
+                gameData.upgrades[type]++;
+                upgradePrices[type] = Math.floor(upgradePrices[type] * 1.5);
+                
+                // Эффекты улучшений
+                switch(type) {
+                    case 'clickPower':
+                        gameData.clickPower++;
+                        showNotification(`Сила клика увеличена до ${gameData.clickPower}!`);
+                        break;
+                    case 'autoClicker':
+                        gameData.autoIncome += 5;
+                        showNotification(`Автокликер добавлен!`);
+                        break;
+                    case 'virusSpread':
+                        gameData.virusLevel++;
+                        showNotification(`Уровень вируса повышен до ${gameData.virusLevel}!`);
+                        break;
+                }
+                
+                updateDisplay();
+                renderUpgrades();
             } else {
-                document.getElementById('userName').textContent = 'Гость';
-                document.getElementById('userId').textContent = 'Войдите через Telegram';
-            }
-            
-            // Установка темы
-            setupTheme();
-            
-            // Загрузка данных
-            loadGames();
-            loadApps();
-            loadProducts();
-            updateHistory();
-            
-            // Настройка поиска
-            setupSearch();
-            
-            console.log('UNIVERSAL SHOP успешно загружен!');
-        }
-        
-        // ==================== ТЕМА ====================
-        function setupTheme() {
-            const isDark = tg.colorScheme === 'dark';
-            if (isDark) {
-                enableDarkTheme();
-            }
-            
-            document.getElementById('themeToggle').addEventListener('click', toggleTheme);
-        }
-        
-        function toggleTheme() {
-            if (document.body.classList.contains('dark-theme')) {
-                disableDarkTheme();
-            } else {
-                enableDarkTheme();
+                showNotification('Недостаточно монет!', 'error');
             }
         }
-        
-        function enableDarkTheme() {
-            document.body.classList.add('dark-theme');
-            document.getElementById('themeToggle').innerHTML = '<i class="fas fa-sun"></i>';
-            tg.setHeaderColor('#0f172a');
-        }
-        
-        function disableDarkTheme() {
-            document.body.classList.remove('dark-theme');
-            document.getElementById('themeToggle').innerHTML = '<i class="fas fa-moon"></i>';
-            tg.setHeaderColor('#ffffff');
-        }
-        
-        // ==================== ЗАГРУЗКА ДАННЫХ ====================
-        function loadGames() {
-            const shelf = document.getElementById('gamesShelf');
-            shelf.innerHTML = '';
+
+        // Рендер улучшений
+        function renderUpgrades() {
+            const container = document.getElementById('upgrades-list');
+            container.innerHTML = '';
             
-            games.forEach(game => {
-                const card = document.createElement('div');
-                card.className = 'game-card fade-in';
-                card.innerHTML = `
-                    <div class="game-icon">${game.icon}</div>
-                    <div class="game-name">${game.name}</div>
-                `;
-                card.onclick = () => openCategory(game);
-                shelf.appendChild(card);
-            });
-        }
-        
-        function loadApps() {
-            const shelf = document.getElementById('appsShelf');
-            shelf.innerHTML = '';
+            const upgrades = [
+                { id: 'clickPower', name: 'Сила клика', desc: '+1 клетка за клик' },
+                { id: 'autoClicker', name: 'Автокликер', desc: '+5 клеток/сек' },
+                { id: 'virusSpread', name: 'Скорость заражения', desc: 'Повышает уровень вируса' },
+                { id: 'cellResistance', name: 'Устойчивость клеток', desc: 'Увеличивает доход' },
+                { id: 'starMultiplier', name: 'Множитель звезд', desc: 'Увеличивает получаемые звезды' }
+            ];
             
-            apps.forEach(app => {
-                const card = document.createElement('div');
-                card.className = 'game-card fade-in';
-                card.innerHTML = `
-                    <div class="game-icon">${app.icon}</div>
-                    <div class="game-name">${app.name}</div>
-                `;
-                card.onclick = () => openCategory(app);
-                shelf.appendChild(card);
-            });
-        }
-        
-        function loadProducts() {
-            const grid = document.getElementById('productsGrid');
-            grid.innerHTML = '';
-            
-            products.forEach(product => {
-                const category = [...games, ...apps].find(c => c.id === product.categoryId);
-                const card = document.createElement('div');
-                card.className = 'product-card fade-in';
-                card.innerHTML = `
-                    <div class="product-image">
-                        ${product.icon}
+            upgrades.forEach(upgrade => {
+                const level = gameData.upgrades[upgrade.id] || 0;
+                const price = upgradePrices[upgrade.id] || 10;
+                
+                const item = document.createElement('div');
+                item.className = 'upgrade-item';
+                item.innerHTML = `
+                    <div class="upgrade-info">
+                        <h4>${upgrade.name} (ур. ${level})</h4>
+                        <p>${upgrade.desc}</p>
                     </div>
-                    <div class="product-info">
-                        <div class="product-name">${product.name}</div>
-                        <div class="product-description">
-                            ${product.description}<br>
-                            <small style="color: var(--accent);">${category ? category.name : 'Игра'}</small>
-                        </div>
-                        <div class="product-footer">
-                            <div class="product-price">${product.currency}${product.price}</div>
-                            <button class="buy-btn" onclick="selectProduct(${product.id})">
-                                Купить
-                            </button>
-                        </div>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-        
-        function updateHistory() {
-            const historyCard = document.getElementById('historyCard');
-            
-            if (viewHistory.length > 0) {
-                const lastItem = viewHistory[viewHistory.length - 1];
-                historyCard.innerHTML = `
-                    <div class="history-header">
-                        <div class="history-title">
-                            <i class="fas fa-clock"></i>
-                            <span>${lastItem.name}</span>
-                        </div>
-                        <button class="delete-btn" onclick="deleteHistoryItem()">
-                            <i class="fas fa-trash"></i> Удалить
+                    <div>
+                        <div class="upgrade-price">${price} монет</div>
+                        <button class="buy-btn" onclick="buyUpgrade('${upgrade.id}')"
+                                ${gameData.coins < price ? 'disabled class="disabled"' : ''}>
+                            КУПИТЬ
                         </button>
                     </div>
-                    <div class="history-item">
-                        <div><strong>Цена:</strong> ${lastItem.currency}${lastItem.price}</div>
-                        <div><strong>Просмотрен:</strong> ${lastItem.time}</div>
-                    </div>
                 `;
-            } else {
-                historyCard.innerHTML = `
-                    <div class="history-header">
-                        <div class="history-title">
-                            <i class="fas fa-clock"></i>
-                            <span>История просмотров</span>
-                        </div>
-                    </div>
-                    <div class="text-center text-muted p-4">
-                        <i class="fas fa-eye-slash" style="font-size: 24px; margin-bottom: 10px;"></i>
-                        <p>Вы еще не просматривали товары</p>
-                    </div>
-                `;
-            }
-        }
-        
-        // ==================== ОТКРЫТИЕ КАТЕГОРИЙ ====================
-        function openCategory(category) {
-            if (isAdmin) {
-                tg.showPopup({
-                    title: `👑 ${category.icon} ${category.name}`,
-                    message: `Управление категорией:\n\nВыберите действие:`,
-                    buttons: [
-                        { id: 'add_product', type: 'default', text: '➕ Добавить товар' },
-                        { id: 'view_products', type: 'default', text: '👁️ Просмотреть товары' },
-                        { id: 'edit', type: 'default', text: '✏️ Редактировать' },
-                        { id: 'close', type: 'cancel', text: 'Закрыть' }
-                    ]
-                }).then(result => {
-                    if (result === 'add_product') {
-                        showAddProductToCategory(category);
-                    } else if (result === 'view_products') {
-                        showCategoryProducts(category);
-                    } else if (result === 'edit') {
-                        editCategory(category);
-                    }
-                });
-            } else {
-                showCategoryProducts(category);
-            }
-        }
-        
-        function showCategoryProducts(category) {
-            const categoryProducts = products.filter(p => p.categoryId === category.id);
-            
-            if (categoryProducts.length === 0) {
-                tg.showAlert(`В категории "${category.name}" пока нет товаров.`);
-                return;
-            }
-            
-            let message = `Товары в "${category.name}":\n\n`;
-            categoryProducts.forEach((p, i) => {
-                message += `${i+1}. ${p.name} - ${p.currency}${p.price}\n`;
-            });
-            
-            tg.showAlert(message);
-        }
-        
-        // ==================== ПОКУПКА ТОВАРОВ ====================
-        function selectProduct(productId) {
-            selectedProduct = products.find(p => p.id === productId);
-            
-            if (!selectedProduct) return;
-            
-            // Добавляем в историю
-            viewHistory.push({
-                id: selectedProduct.id,
-                name: selectedProduct.name,
-                price: selectedProduct.price,
-                currency: selectedProduct.currency,
-                time: new Date().toLocaleTimeString()
-            });
-            
-            // Сохраняем историю
-            localStorage.setItem('universal_shop_history', JSON.stringify(viewHistory));
-            updateHistory();
-            
-            // Показываем модалку оплаты
-            showPaymentModal();
-        }
-        
-        function showPaymentModal() {
-            const paymentInfo = document.getElementById('paymentInfo');
-            paymentInfo.innerHTML = `
-                <div style="background: var(--bg-secondary); padding: 15px; border-radius: 12px; margin-bottom: 20px;">
-                    <h4 style="margin-bottom: 10px;">${selectedProduct.name}</h4>
-                    <p style="margin-bottom: 5px;">${selectedProduct.description}</p>
-                    <div style="font-size: 24px; font-weight: bold; color: var(--accent);">
-                        ${selectedProduct.currency}${selectedProduct.price}
-                    </div>
-                </div>
-            `;
-            
-            openModal('paymentModal');
-        }
-        
-        function selectPayment(method) {
-            closeModal('paymentModal');
-            
-            if (method === 'crypto') {
-                document.getElementById('cryptoAmount').textContent = 
-                    `${selectedProduct.currency}${selectedProduct.price}`;
-                openModal('cryptoModal');
-            } else if (method === 'rub') {
-                // Конвертация в рубли (примерный курс)
-                const rubPrice = selectedProduct.price * 90;
-                document.getElementById('rubAmount').textContent = 
-                    `${Math.round(rubPrice)} ₽`;
-                document.getElementById('orderId').textContent = 
-                    selectedProduct.id.toString().padStart(4, '0');
-                openModal('rubModal');
-            }
-        }
-        
-        function completeCryptoPayment() {
-            closeModal('cryptoModal');
-            deliverProduct('crypto');
-        }
-        
-        function completeRubPayment() {
-            closeModal('rubModal');
-            
-            tg.showAlert(`✅ Заказ создан!\n\nОжидайте проверки оплаты администратором. Как только перевод будет подтвержден, вы получите товар.\n\nНомер заказа: US-${selectedProduct.id.toString().padStart(4, '0')}`);
-            
-            // Отправляем уведомление админу (в реальном приложении)
-            sendOrderToAdmin('rub');
-        }
-        
-        function deliverProduct(paymentMethod) {
-            tg.showAlert(`✅ Оплата подтверждена!\n\n🎁 Ваш товар:\n${selectedProduct.name}\n\n📦 ДАННЫЯ ДЛЯ ПОЛУЧЕНИЯ:\n\n${selectedProduct.deliveryData}\n\n⚠️ Сохраните эти данные!`);
-            
-            // Отправляем данные в бота
-            if (currentUser) {
-                tg.sendData(JSON.stringify({
-                    action: 'product_delivered',
-                    productId: selectedProduct.id,
-                    userId: currentUser.id,
-                    userName: currentUser.first_name,
-                    productName: selectedProduct.name,
-                    paymentMethod: paymentMethod,
-                    deliveryData: selectedProduct.deliveryData,
-                    timestamp: new Date().toISOString()
-                }));
-            }
-            
-            selectedProduct = null;
-        }
-        
-        function sendOrderToAdmin(paymentMethod) {
-            // В реальном приложении здесь запрос к бэкенду
-            console.log('Заказ отправлен админу:', {
-                product: selectedProduct,
-                user: currentUser,
-                paymentMethod: paymentMethod,
-                timestamp: new Date().toISOString()
+                container.appendChild(item);
             });
         }
-        
-        // ==================== АДМИН-ФУНКЦИИ ====================
-        function showAddGameModal() {
-            openModal('addGameModal');
+
+        // Донат функции
+        function buyStars(amount) {
+            const price = amount / 100; // $1 за 100 звезд
+            if (confirm(`Купить ${amount} звезд за $${price}?`)) {
+                // Здесь должна быть интеграция с платежной системой
+                gameData.stars += amount;
+                showNotification(`Получено ${amount} звезд!`);
+                updateDisplay();
+            }
         }
-        
-        function addGame() {
-            const name = document.getElementById('gameName').value.trim();
-            const icon = document.getElementById('gameIcon').value.trim();
-            
-            if (!name || !icon) {
-                tg.showAlert('Заполните все поля!');
-                return;
+
+        function buyTon(amount) {
+            const price = amount; // $1 за 1 TON
+            if (confirm(`Купить ${amount} TON за $${price}?\nTON будут отправлены на кошелек разработчика`)) {
+                // Здесь должна быть интеграция с TON
+                showNotification(`Заказ на ${amount} TON оформлен!`);
+                // Открываем ссылку на TON бота
+                window.open('https://t.me/send?start=IV4r05Ardq6U', '_blank');
+            }
+        }
+
+        // Навигация
+        function openUpgrades() {
+            document.getElementById('shop-section').style.display = 'block';
+            document.getElementById('donate-section').style.display = 'none';
+            renderUpgrades();
+        }
+
+        function closeShop() {
+            document.getElementById('shop-section').style.display = 'none';
+        }
+
+        function openDonate() {
+            document.getElementById('donate-section').style.display = 'block';
+            document.getElementById('shop-section').style.display = 'none';
+        }
+
+        function closeDonate() {
+            document.getElementById('donate-section').style.display = 'none';
+        }
+
+        function openLeaderboard() {
+            alert('Топ игроков будет доступен после подключения к серверу');
+        }
+
+        function openDailyBonus() {
+            alert('Ежедневный бонус будет доступен после подключения к серверу');
+        }
+
+        // Инициализация
+        function initGame() {
+            // Загрузка сохраненных данных
+            const saved = localStorage.getItem('virusGameData');
+            if (saved) {
+                gameData = JSON.parse(saved);
             }
             
-            const newGame = {
-                id: Date.now(),
-                name: name,
-                icon: icon,
-                type: 'game'
-            };
+            updateDisplay();
+            renderUpgrades();
             
-            games.push(newGame);
-            localStorage.setItem('universal_shop_games', JSON.stringify(games));
-            
-            loadGames();
-            closeModal('addGameModal');
-            tg.showAlert(`✅ Игра "${name}" добавлена!`);
+            // Автосохранение каждые 30 секунд
+            setInterval(() => {
+                localStorage.setItem('virusGameData', JSON.stringify(gameData));
+            }, 30000);
+        }
+
+        // Запуск игры
+        window.onload = initGame;
+    </script>
+</body>
+</html><!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вирус Игра - Мини-приложение</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
-        function showAddAppModal() {
-            tg.showAlert('Форма добавления приложения (аналогична добавлению игры)');
+        body {
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 100%);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
         }
         
-        function showAddProductModal() {
-            // Заполняем список категорий
-            const categorySelect = document.getElementById('productCategory');
-            categorySelect.innerHTML = '<option value="">Выберите игру/приложение</option>';
-            
-            games.forEach(game => {
-                const option = document.createElement('option');
-                option.value = game.id;
-                option.textContent = `🎮 ${game.name}`;
-                categorySelect.appendChild(option);
-            });
-            
-            apps.forEach(app => {
-                const option = document.createElement('option');
-                option.value = app.id;
-                option.textContent = `📱 ${app.name}`;
-                categorySelect.appendChild(option);
-            });
-            
-            openModal('addProductModal');
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
         }
         
-        function showAddProductToCategory(category) {
-            showAddProductModal();
-            document.getElementById('productCategory').value = category.id;
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #00ff88;
         }
         
-        function addProduct() {
-            const categoryId = parseInt(document.getElementById('productCategory').value);
-            const name = document.getElementById('productName').value.trim();
-            const description = document.getElementById('productDescription').value.trim();
-            const price = parseFloat(document.getElementById('productPrice').value);
-            const currency = document.getElementById('productCurrency').value;
-            const icon = document.getElementById('productIcon').value.trim();
-            const image = document.getElementById('productImage').value.trim();
-            const deliveryData = document.getElementById('productData').value.trim();
+        .stats-bar {
+            display: flex;
+            gap: 20px;
+            background: rgba(0, 255, 136, 0.1);
+            padding: 15px;
+            border-radius: 15px;
+            margin-bottom: 25px;
+            border: 1px solid #00ff88;
+        }
+        
+        .stat-item {
+            text-align: center;
+            flex: 1;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: bold;
+            color: #00ff88;
+            text-shadow: 0 0 10px #00ff88;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #aaa;
+            margin-top: 5px;
+        }
+        
+        .virus-container {
+            text-align: center;
+            margin: 30px 0;
+            padding: 40px;
+            background: rgba(255, 0, 100, 0.1);
+            border-radius: 25px;
+            border: 2px solid #ff0064;
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        
+        .virus-container:active {
+            transform: scale(0.95);
+        }
+        
+        .virus-img {
+            width: 150px;
+            height: 150px;
+            background: radial-gradient(circle, #ff0064 0%, #99003d 100%);
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            animation: pulse 2s infinite;
+            box-shadow: 0 0 50px #ff0064;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        .click-text {
+            font-size: 18px;
+            color: #ff0064;
+            margin-top: 10px;
+        }
+        
+        .buttons-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .btn {
+            padding: 20px;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+            border: 1px solid #00a2ff;
+            border-radius: 15px;
+            color: #00a2ff;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            background: rgba(0, 162, 255, 0.2);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 20px rgba(0, 162, 255, 0.3);
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #00ff88 0%, #00cc6a 100%);
+            border: none;
+            color: #000;
+            font-weight: bold;
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, #ff0064 0%, #cc0050 100%);
+            border: none;
+            color: white;
+        }
+        
+        .shop {
+            margin-top: 40px;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 25px;
+            border-radius: 20px;
+        }
+        
+        .shop-title {
+            color: #00ff88;
+            margin-bottom: 20px;
+            font-size: 22px;
+        }
+        
+        .upgrade-item {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 4px solid #00ff88;
+        }
+        
+        .upgrade-info h4 {
+            color: #00a2ff;
+            margin-bottom: 5px;
+        }
+        
+        .upgrade-price {
+            color: #00ff88;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        
+        .buy-btn {
+            background: #00ff88;
+            color: #000;
+            border: none;
+            padding: 8px 20px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        
+        .disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .donate-section {
+            margin-top: 40px;
+            background: rgba(255, 215, 0, 0.1);
+            padding: 25px;
+            border-radius: 20px;
+            border: 1px solid gold;
+        }
+        
+        .donate-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .star {
+            color: gold;
+        }
+        
+        .ton {
+            color: #0088cc;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #00ff88;
+            color: #000;
+            padding: 15px 25px;
+            border-radius: 10px;
+            display: none;
+            z-index: 1000;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(0, 255, 136, 0.3);
+        }
+        
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 50px;
+            color: #00ff88;
+        }
+    </style>
+</head>
+<body>
+    <div class="notification" id="notification"></div>
+    
+    <div class="container">
+        <div class="header">
+            <h1>🦠 ВИРУС ИГРА</h1>
+            <div id="user-balance">
+                <span class="star">★ 0</span> | 
+                <span class="ton">💎 0</span>
+            </div>
+        </div>
+        
+        <div class="stats-bar">
+            <div class="stat-item">
+                <div class="stat-value" id="cells-count">0</div>
+                <div class="stat-label">Зараженных клеток</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="virus-level">1</div>
+                <div class="stat-label">Уровень вируса</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="coins-count">0</div>
+                <div class="stat-label">Монет</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="auto-income">0/сек</div>
+                <div class="stat-label">Автозаработок</div>
+            </div>
+        </div>
+        
+        <div class="virus-container" id="click-area">
+            <div class="virus-img">
+                🦠
+            </div>
+            <div class="click-text">КЛИКАЙ ДЛЯ ЗАРАЖЕНИЯ!</div>
+        </div>
+        
+        <div class="buttons-grid">
+            <button class="btn btn-primary" onclick="openUpgrades()">⚡ УЛУЧШЕНИЯ</button>
+            <button class="btn" onclick="openLeaderboard()">🏆 ТОП ИГРОКОВ</button>
+            <button class="btn" onclick="openDailyBonus()">🎁 ЕЖЕДНЕВНЫЙ БОНУС</button>
+            <button class="btn" onclick="openDonate()">💰 ДОНАТ</button>
+        </div>
+        
+        <div class="shop" id="shop-section" style="display: none;">
+            <h3 class="shop-title">⚡ УЛУЧШЕНИЯ</h3>
+            <div id="upgrades-list">
+                <!-- Динамически заполнятся -->
+            </div>
+            <button class="btn" onclick="closeShop()" style="margin-top: 20px;">← НАЗАД</button>
+        </div>
+        
+        <div class="donate-section" id="donate-section" style="display: none;">
+            <h3 class="shop-title">💰 ДОНАТ СИСТЕМА</h3>
+            <p>Звезды идут на баланс игры, TON идут на счет разработчика</p>
             
-            if (!categoryId || !name || !description || !price || !icon || !deliveryData) {
-                tg.showAlert('Заполните все обязательные поля!');
-                return;
+            <div class="donate-buttons">
+                <button class="btn btn-primary" onclick="buyStars(100)">★ 100 звезд - $1</button>
+                <button class="btn btn-primary" onclick="buyStars(500)">★ 500 звезд - $5</button>
+                <button class="btn btn-primary" onclick="buyStars(1000)">★ 1000 звезд - $10</button>
+            </div>
+            
+            <div class="donate-buttons">
+                <button class="btn btn-danger" onclick="buyTon(10)">💎 10 TON - $10</button>
+                <button class="btn btn-danger" onclick="buyTon(50)">💎 50 TON - $50</button>
+                <button class="btn btn-danger" onclick="buyTon(100)">💎 100 TON - $100</button>
+            </div>
+            
+            <p style="margin-top: 20px; color: #aaa;">
+                TON переводы отправляются на: <br>
+                <code id="ton-wallet">UQAH4r05Ardq6U_bdIq4gYr0Jw6J8Q5KX7Yt9z8pLmNjKjH</code>
+            </p>
+            
+            <button class="btn" onclick="closeDonate()" style="margin-top: 20px;">← НАЗАД</button>
+        </div>
+        
+        <div class="loading" id="loading">
+            Загрузка...
+        </div>
+    </div>
+
+    <script>
+        // Игровые данные
+        let gameData = {
+            cells: 0,
+            coins: 0,
+            stars: 0,
+            ton: 0,
+            virusLevel: 1,
+            clickPower: 1,
+            autoIncome: 0,
+            upgrades: {
+                clickPower: 1,
+                autoClicker: 0,
+                virusSpread: 1,
+                cellResistance: 1
             }
+        };
+
+        // Цены улучшений
+        const upgradePrices = {
+            clickPower: 10,
+            autoClicker: 50,
+            virusSpread: 100,
+            cellResistance: 150,
+            starMultiplier: 200
+        };
+
+        // Функции уведомлений
+        function showNotification(text, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = text;
+            notification.style.display = 'block';
+            notification.style.background = type === 'success' ? '#00ff88' : '#ff0064';
             
-            const newProduct = {
-                id: Date.now(),
-                name: name,
-                description: description,
-                price: price,
-                currency: currency,
-                icon: icon,
-                categoryId: categoryId,
-                image: image,
-                deliveryData: deliveryData
-            };
-            
-            products.push(newProduct);
-            localStorage.setItem('universal_shop_products', JSON.stringify(products));
-            
-            loadProducts();
-            closeModal('addProductModal');
-            tg.showAlert(`✅ Товар "${name}" добавлен!`);
-        }
-        
-        function editCategory(category) {
-            tg.showAlert(`Редактирование категории "${category.name}" (в разработке)`);
-        }
-        
-        function manageOrders() {
-            tg.showAlert('Управление заказами (перейдите в Telegram-группу для просмотра заказов)');
-        }
-        
-        // ==================== ДОПОЛНИТЕЛЬНЫЕ ФУНКЦИИ ====================
-        function deleteHistoryItem() {
-            viewHistory = [];
-            localStorage.setItem('universal_shop_history', JSON.stringify(viewHistory));
-            updateHistory();
-            tg.showAlert('История просмотров очищена');
-        }
-        
-        function showAllGames() {
-            tg.showAlert('Все игры (в разработке)');
-        }
-        
-        function showAllApps() {
-            tg.showAlert('Все приложения (в разработке)');
-        }
-        
-        function openChat() {
-            openModal('chatModal');
-        }
-        
-        function sendMessage() {
-            const input = document.getElementById('chatInput');
-            const message = input.value.trim();
-            
-            if (!message) return;
-            
-            const chatMessages = document.getElementById('chatMessages');
-            const newMessage = document.createElement('div');
-            newMessage.className = 'message message-user';
-            newMessage.innerHTML = `<strong>Вы:</strong> ${message}`;
-            chatMessages.appendChild(newMessage);
-            
-            input.value = '';
-            
-            // Авто-ответ (имитация)
             setTimeout(() => {
-                const response = document.createElement('div');
-                response.className = 'message message-admin';
-                response.innerHTML = `<strong>Поддержка:</strong> Спасибо за сообщение! Ответим в ближайшее время.`;
-                chatMessages.appendChild(response);
-                chatMessages.scrollTop = chatMessages.scrollHeight;
-            }, 1000);
+                notification.style.display = 'none';
+            }, 3000);
+        }
+
+        // Клик по вирусу
+        document.getElementById('click-area').addEventListener('click', function() {
+            const cellsEarned = gameData.clickPower * gameData.virusLevel;
+            gameData.cells += cellsEarned;
+            gameData.coins += Math.floor(cellsEarned * 0.1);
             
-            chatMessages.scrollTop = chatMessages.scrollHeight;
-        }
-        
-        function openBonuses() {
-            openModal('bonusesModal');
-        }
-        
-        function openProfile() {
-            openModal('profileModal');
-        }
-        
-        function showUserOrders() {
-            tg.showAlert('Мои заказы (в разработке)');
-        }
-        
-        // ==================== УТИЛИТЫ ====================
-        function openModal(modalId) {
-            document.getElementById(modalId).classList.remove('hidden');
-        }
-        
-        function closeModal(modalId) {
-            document.getElementById(modalId).classList.add('hidden');
-        }
-        
-        function copyText(text) {
-            navigator.clipboard.writeText(text).then(() => {
-                tg.showAlert('Текст скопирован!');
-            });
-        }
-        
-        function setupSearch() {
-            const searchInput = document.getElementById('searchInput');
-            searchInput.addEventListener('input', function(e) {
-                const query = e.target.value.toLowerCase();
-                if (query.length > 1) {
-                    // Фильтрация товаров (в реальном приложении будет на сервере)
-                    console.log('Поиск:', query);
+            updateDisplay();
+            
+            // Создаем летающий текст
+            const flyingText = document.createElement('div');
+            flyingText.textContent = `+${cellsEarned} клеток`;
+            flyingText.style.position = 'absolute';
+            flyingText.style.color = '#00ff88';
+            flyingText.style.fontWeight = 'bold';
+            flyingText.style.pointerEvents = 'none';
+            flyingText.style.left = (event.clientX + 20) + 'px';
+            flyingText.style.top = (event.clientY - 20) + 'px';
+            document.body.appendChild(flyingText);
+            
+            // Анимация
+            let posY = event.clientY - 20;
+            const animation = setInterval(() => {
+                posY -= 2;
+                flyingText.style.top = posY + 'px';
+                flyingText.style.opacity = (parseFloat(flyingText.style.opacity) || 1) - 0.02;
+                
+                if (posY < event.clientY - 100) {
+                    clearInterval(animation);
+                    document.body.removeChild(flyingText);
                 }
-            });
-        }
-        
-        // ==================== ОБРАБОТКА СОБЫТИЙ ====================
-        // Закрытие модалок по клику на оверлей
-        document.querySelectorAll('.modal-overlay').forEach(modal => {
-            modal.addEventListener('click', function(e) {
-                if (e.target === this) {
-                    this.classList.add('hidden');
-                }
-            });
+            }, 20);
         });
-        
-        // Горячие клавиши
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Escape') {
-                document.querySelectorAll('.modal-overlay').forEach(modal => {
-                    modal.classList.add('hidden');
-                });
+
+        // Обновление отображения
+        function updateDisplay() {
+            document.getElementById('cells-count').textContent = gameData.cells;
+            document.getElementById('virus-level').textContent = gameData.virusLevel;
+            document.getElementById('coins-count').textContent = gameData.coins;
+            document.getElementById('auto-income').textContent = `${gameData.autoIncome}/сек`;
+            
+            const balanceElement = document.getElementById('user-balance');
+            balanceElement.innerHTML = `<span class="star">★ ${gameData.stars}</span> | <span class="ton">💎 ${gameData.ton}</span>`;
+        }
+
+        // Автозаработок
+        setInterval(() => {
+            if (gameData.autoIncome > 0) {
+                const earned = Math.floor(gameData.autoIncome / 10);
+                gameData.cells += earned;
+                gameData.coins += Math.floor(earned * 0.05);
+                updateDisplay();
             }
-        });
+        }, 1000);
+
+        // Покупка улучшений
+        function buyUpgrade(type) {
+            const price = upgradePrices[type] * (gameData.upgrades[type] + 1);
+            
+            if (gameData.coins >= price) {
+                gameData.coins -= price;
+                gameData.upgrades[type]++;
+                upgradePrices[type] = Math.floor(upgradePrices[type] * 1.5);
+                
+                // Эффекты улучшений
+                switch(type) {
+                    case 'clickPower':
+                        gameData.clickPower++;
+                        showNotification(`Сила клика увеличена до ${gameData.clickPower}!`);
+                        break;
+                    case 'autoClicker':
+                        gameData.autoIncome += 5;
+                        showNotification(`Автокликер добавлен!`);
+                        break;
+                    case 'virusSpread':
+                        gameData.virusLevel++;
+                        showNotification(`Уровень вируса повышен до ${gameData.virusLevel}!`);
+                        break;
+                }
+                
+                updateDisplay();
+                renderUpgrades();
+            } else {
+                showNotification('Недостаточно монет!', 'error');
+            }
+        }
+
+        // Рендер улучшений
+        function renderUpgrades() {
+            const container = document.getElementById('upgrades-list');
+            container.innerHTML = '';
+            
+            const upgrades = [
+                { id: 'clickPower', name: 'Сила клика', desc: '+1 клетка за клик' },
+                { id: 'autoClicker', name: 'Автокликер', desc: '+5 клеток/сек' },
+                { id: 'virusSpread', name: 'Скорость заражения', desc: 'Повышает уровень вируса' },
+                { id: 'cellResistance', name: 'Устойчивость клеток', desc: 'Увеличивает доход' },
+                { id: 'starMultiplier', name: 'Множитель звезд', desc: 'Увеличивает получаемые звезды' }
+            ];
+            
+            upgrades.forEach(upgrade => {
+                const level = gameData.upgrades[upgrade.id] || 0;
+                const price = upgradePrices[upgrade.id] || 10;
+                
+                const item = document.createElement('div');
+                item.className = 'upgrade-item';
+                item.innerHTML = `
+                    <div class="upgrade-info">
+                        <h4>${upgrade.name} (ур. ${level})</h4>
+                        <p>${upgrade.desc}</p>
+                    </div>
+                    <div>
+                        <div class="upgrade-price">${price} монет</div>
+                        <button class="buy-btn" onclick="buyUpgrade('${upgrade.id}')"
+                                ${gameData.coins < price ? 'disabled class="disabled"' : ''}>
+                            КУПИТЬ
+                        </button>
+                    </div>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        // Донат функции
+        function buyStars(amount) {
+            const price = amount / 100; // $1 за 100 звезд
+            if (confirm(`Купить ${amount} звезд за $${price}?`)) {
+                // Здесь должна быть интеграция с платежной системой
+                gameData.stars += amount;
+                showNotification(`Получено ${amount} звезд!`);
+                updateDisplay();
+            }
+        }
+
+        function buyTon(amount) {
+            const price = amount; // $1 за 1 TON
+            if (confirm(`Купить ${amount} TON за $${price}?\nTON будут отправлены на кошелек разработчика`)) {
+                // Здесь должна быть интеграция с TON
+                showNotification(`Заказ на ${amount} TON оформлен!`);
+                // Открываем ссылку на TON бота
+                window.open('https://t.me/send?start=IV4r05Ardq6U', '_blank');
+            }
+        }
+
+        // Навигация
+        function openUpgrades() {
+            document.getElementById('shop-section').style.display = 'block';
+            document.getElementById('donate-section').style.display = 'none';
+            renderUpgrades();
+        }
+
+        function closeShop() {
+            document.getElementById('shop-section').style.display = 'none';
+        }
+
+        function openDonate() {
+            document.getElementById('donate-section').style.display = 'block';
+            document.getElementById('shop-section').style.display = 'none';
+        }
+
+        function closeDonate() {
+            document.getElementById('donate-section').style.display = 'none';
+        }
+
+        function openLeaderboard() {
+            alert('Топ игроков будет доступен после подключения к серверу');
+        }
+
+        function openDailyBonus() {
+            alert('Ежедневный бонус будет доступен после подключения к серверу');
+        }
+
+        // Инициализация
+        function initGame() {
+            // Загрузка сохраненных данных
+            const saved = localStorage.getItem('virusGameData');
+            if (saved) {
+                gameData = JSON.parse(saved);
+            }
+            
+            updateDisplay();
+            renderUpgrades();
+            
+            // Автосохранение каждые 30 секунд
+            setInterval(() => {
+                localStorage.setItem('virusGameData', JSON.stringify(gameData));
+            }, 30000);
+        }
+
+        // Запуск игры
+        window.onload = initGame;
     </script>
 </body>
 </html>
